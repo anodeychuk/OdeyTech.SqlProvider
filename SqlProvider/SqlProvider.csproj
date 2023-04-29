@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyTitle>SqlProvider</AssemblyTitle>
+    <Company>Andrii Odeychuk</Company>
+    <Product>SqlProvider</Product>
+    <Copyright>Copyright © Andrii Odeychuk 2023</Copyright>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+</Project>
