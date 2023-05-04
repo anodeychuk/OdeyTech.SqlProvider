@@ -2,12 +2,17 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <LangVersion>9.0</LangVersion>
-    <AssemblyTitle>SqlProvider</AssemblyTitle>
+    <AssemblyTitle>OdeyTech.SqlProvider</AssemblyTitle>
     <Company>Andrii Odeychuk</Company>
-    <Product>SqlProvider</Product>
-    <Copyright>Copyright © Andrii Odeychuk 2023</Copyright>
+    <Product>OdeyTech.SqlProvider</Product>
+    <Copyright>Copyright © $(Company) 2023.</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <AssemblyVersion>0.0.11</AssemblyVersion>
+    <Authors>$(Company)</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Allows you to create SQL queries based on specifying columns and their types, as well as tables to which they belong and selection criteria.</Description>
+    <RepositoryUrl>https://github.com/anodeychuk/OdeyTech.SqlProvider</RepositoryUrl>
+    <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -15,6 +20,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OdeyTech.ProductivityKit" Version="0.0.2" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />

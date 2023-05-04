@@ -6,7 +6,7 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-namespace SqlProvider.Query
+namespace OdeyTech.SqlProvider.Query
 {
   /// <summary>
   /// Value of a SQL column.

@@ -10,7 +10,7 @@ using System;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace SqlProvider.Executor
+namespace OdeyTech.SqlProvider.Executor
 {
   /// <summary>
   /// Exception that is thrown when a SQL query execution fails.

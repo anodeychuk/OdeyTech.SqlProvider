@@ -8,7 +8,7 @@
 
 using System;
 
-namespace SqlProvider.Query
+namespace OdeyTech.SqlProvider.Query
 {
   /// <summary>
   /// SQL queries generator.

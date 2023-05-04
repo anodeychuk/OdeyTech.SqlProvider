@@ -11,15 +11,16 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using OdeyTech.ProductivityKit.Extension;
 
-namespace SqlProvider.Executor
+namespace OdeyTech.SqlProvider.Executor
 {
   /// <summary>
   /// Represents a SQL query executor.
   /// </summary>
   public class SqlExecutor : ISqlExecutor
   {
-    private DbConnection connection;
+    private IDbConnection connection;
 
     /// <summary>
     /// Disposes the database connection when this object is no longer needed.
@@ -29,8 +30,8 @@ namespace SqlProvider.Executor
     /// <summary>
     /// Sets the database connection.
     /// </summary>
-    /// <param name="connection">The <see cref="DbConnection"/> object representing the database connection.</param>
-    public void SetDbConnection(DbConnection connection) => this.connection = connection;
+    /// <param name="connection">The <see cref="IDbConnection"/> object representing the database connection.</param>
+    public void SetDbConnection(IDbConnection connection) => this.connection = connection;
 
     /// <summary>
     /// Executes a single SQL query that is an insert, update or delete statement.
@@ -46,11 +47,11 @@ namespace SqlProvider.Executor
 
       OpenConnection();
 
-      using DbCommand command = this.connection.CreateCommand();
-      using DbTransaction transaction = this.connection.BeginTransaction();
+      using IDbCommand command = this.connection.CreateCommand();
+      using IDbTransaction transaction = this.connection.BeginTransaction();
       command.Transaction = transaction;
       command.CommandText = query;
-      command.Parameters.AddRange(parameters);
+      AddParameters(command.Parameters, parameters);
 
       try
       {
@@ -81,16 +82,16 @@ namespace SqlProvider.Executor
       }
 
       OpenConnection();
-      using DbTransaction transaction = this.connection.BeginTransaction();
+      using IDbTransaction transaction = this.connection.BeginTransaction();
 
       try
       {
         foreach (var query in queries)
         {
-          using DbCommand command = this.connection.CreateCommand();
+          using IDbCommand command = this.connection.CreateCommand();
           command.Transaction = transaction;
           command.CommandText = query;
-          command.Parameters.AddRange(parameters);
+          AddParameters(command.Parameters, parameters);
           command.ExecuteNonQuery();
         }
 
@@ -120,11 +121,11 @@ namespace SqlProvider.Executor
 
       try
       {
-        using DbCommand command = this.connection.CreateCommand();
+        using IDbCommand command = this.connection.CreateCommand();
         command.CommandText = query;
-        command.Parameters.AddRange(parameters);
+        AddParameters(command.Parameters, parameters);
 
-        using DbDataReader dataReader = command.ExecuteReader();
+        using var dataReader = command.ExecuteReader();
         dataTable.Load(dataReader);
       }
       catch (SqlException ex)
@@ -145,17 +146,17 @@ namespace SqlProvider.Executor
     /// <param name="storeProcedureName">The name of the stored procedure to execute.</param>
     /// <param name="parameters">The parameters for the stored procedure
     /// <returns>A list of output parameters returned by the stored procedure.</returns>
-    public List<DbParameter> StoreProcedure(string storeProcedureName, List<DbParameter> parameters)
+    public List<DbParameter> StoreProcedure(string storeProcedureName, params DbParameter[] parameters)
     {
       List<DbParameter> outputParameters = new();
       OpenConnection();
 
       try
       {
-        using DbCommand command = this.connection.CreateCommand();
+        using var command = this.connection.CreateCommand();
         command.CommandText = storeProcedureName;
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.AddRange(parameters.ToArray());
+        AddParameters(command.Parameters, parameters);
         command.ExecuteNonQuery();
 
         foreach (DbParameter item in command.Parameters)
@@ -184,17 +185,17 @@ namespace SqlProvider.Executor
     /// <param name="storeFunctionName">The name of the stored function to execute.</param>
     /// <param name="parameters">The parameters for the stored function.</param>
     /// <returns>The result returned by the stored function.</returns>
-    public object StoreFunction(string storeFunctionName, List<DbParameter> parameters)
+    public object StoreFunction(string storeFunctionName, params DbParameter[] parameters)
     {
       object result = null;
 
       try
       {
         OpenConnection();
-        using DbCommand command = this.connection.CreateCommand();
+        using var command = this.connection.CreateCommand();
         command.CommandText = storeFunctionName;
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.AddRange(parameters.ToArray());
+        AddParameters(command.Parameters, parameters);
         command.ExecuteNonQuery();
 
         foreach (DbParameter item in command.Parameters)
@@ -245,6 +246,24 @@ namespace SqlProvider.Executor
       catch (DbException ex)
       {
         throw new SqlExecutorException($"Exception while closing connection: {ex.Message}", ex);
+      }
+    }
+
+    /// <summary>
+    /// Adds a collection of DbParameter objects to an IDataParameterCollection.
+    /// </summary>
+    /// <param name="parameterCollection">The IDataParameterCollection to add the parameters to.</param>
+    /// <param name="parameters">An array of DbParameter objects to add to the collection.</param>
+    private void AddParameters(IDataParameterCollection parameterCollection, params DbParameter[] parameters)
+    {
+      if (parameters.IsNullOrEmpty())
+      {
+        return;
+      }
+
+      foreach (var parameter in parameters)
+      {
+        parameterCollection.Add(parameter);
       }
     }
   }

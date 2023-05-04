@@ -9,7 +9,7 @@
 using System;
 using System.Linq;
 
-namespace SqlProvider.Query
+namespace OdeyTech.SqlProvider.Query
 {
   /// <summary>
   /// SQL types of query.

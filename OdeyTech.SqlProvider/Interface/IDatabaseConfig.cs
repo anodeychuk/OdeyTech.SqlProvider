@@ -6,7 +6,7 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-namespace SqlProvider.Interface
+namespace OdeyTech.SqlProvider.Interface
 {
   /// <summary>
   /// Defines the configuration for a database.

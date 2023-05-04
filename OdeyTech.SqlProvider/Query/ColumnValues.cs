@@ -9,7 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SqlProvider.Query;
+using OdeyTech.SqlProvider.Query;
 
 /// <summary>
 /// Represents a collection of column values to be used in SQL queries.

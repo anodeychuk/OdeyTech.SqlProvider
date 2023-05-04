@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
-namespace SqlProvider.Executor
+namespace OdeyTech.SqlProvider.Executor
 {
   public interface ISqlExecutor : IDisposable
   {
@@ -43,7 +43,7 @@ namespace SqlProvider.Executor
     /// <param name="storeFunctionName">The name of the stored function to execute.</param>
     /// <param name="parameters">The parameters for the stored function.</param>
     /// <returns>The result returned by the stored function.</returns>
-    object StoreFunction(string storeFunctionName, List<DbParameter> parameters);
+    object StoreFunction(string storeFunctionName, params DbParameter[] parameter);
 
     /// <summary>
     /// Executes a stored procedure in a database.
@@ -51,6 +51,6 @@ namespace SqlProvider.Executor
     /// <param name="storeProcedureName">The name of the stored procedure to execute.</param>
     /// <param name="parameters">The parameters for the stored procedure
     /// <returns>A list of output parameters returned by the stored procedure.</returns>
-    List<DbParameter> StoreProcedure(string storeProcedureName, List<DbParameter> parameters);
+    List<DbParameter> StoreProcedure(string storeProcedureName, params DbParameter[] parameters);
   }
 }
