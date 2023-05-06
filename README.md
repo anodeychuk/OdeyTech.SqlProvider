@@ -6,10 +6,10 @@
 
 - Strongly-typed column and table definitions for increased maintainability and reduced errors.
 - Flexible and composable query generation, allowing you to build complex queries with ease:
-    - **`SqlQueryGenerator`**: A powerful utility that allows you to easily generate various SQL queries, such as `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, using the SqlQuerySource object.
+    - **`SqlQueryGenerator`**: A powerful utility that allows you to easily generate various SQL queries, such as `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, using the `SqlQuerySource` object.
     - **`SqlQuerySource`**: A flexible and extensible class to define the structure of your SQL queries, including table names, columns, join statements, conditions, and more.
     - **`ColumnValues`**: Represents a collection of column values to be used in SQL queries, allowing you to add, update, or exclude columns and their values.
-    - **`SqlType`**: Defines the different types of SQL queries supported by the library: Select, Insert, Update, and Delete.
+    - **`SqlType`**: Defines the different types of SQL queries supported by the library: `SELECT`, `INSERT`, `UPDATE`, and `DELETE`.
 - Intuitive and easy-to-understand API, designed with both experienced and novice developers in mind.
 - Comprehensive query execution features, including support for stored procedures and functions.
 - Lightweight and efficient codebase, making it suitable for use in projects of any size.
