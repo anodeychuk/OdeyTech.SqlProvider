@@ -7,21 +7,14 @@
 // --------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using OdeyTech.ProductivityKit.Extension;
+using OdeyTech.SqlProvider.Enum;
+using OdeyTech.SqlProvider.Query.Constraint;
 
 namespace OdeyTech.SqlProvider.Query
 {
-  /// <summary>
-  /// SQL types of query.
-  /// </summary>
-  public enum SqlType
-  {
-    Select,
-    Insert,
-    Update,
-    Delete
-  }
-
   /// <summary>
   /// SQL query source.
   /// </summary>
@@ -29,14 +22,15 @@ namespace OdeyTech.SqlProvider.Query
   {
     private string tableName;
     private string tablePrefix;
-    private string[] joins;
-    private string[] conditions;
-    private string[] orderBy;
+    private List<string> joins;
+    private List<string> conditions;
+    private List<string> orderBy;
+    private List<IConstraint> constraints;
 
     /// <summary>
     /// Columns of the SQL query source.
     /// </summary>
-    public ColumnValues Columns { get; private set; } = new();
+    public SqlColumns Columns { get; private set; } = new();
 
     /// <summary>
     /// Sets the table name and prefix of the SQL query source.
@@ -70,18 +64,26 @@ namespace OdeyTech.SqlProvider.Query
     /// </summary>
     /// <param name="joins">The join statements.</param>
     public void AddJoins(params string[] joins)
-        => this.joins = this.joins == null || this.joins.Length == 0
-                          ? joins
-                          : this.joins.Concat(joins).ToArray();
+    {
+
+      if (this.joins.IsNullOrEmpty())
+      {
+        this.joins = new List<string>(joins);
+      }
+      else
+      {
+        this.joins.AddRange(joins);
+      }
+    }
 
     /// <summary>
     /// Gets the join statements of the SQL query source.
     /// </summary>
     /// <returns>The join statements.</returns>
     public string GetJoins()
-        => this.joins == null || this.joins.Length == 0
-              ? string.Empty
-              : $" {string.Join(" ", this.joins)}";
+      => this.joins.IsNullOrEmpty()
+        ? string.Empty
+        : $" {string.Join(" ", this.joins)}";
 
     /// <summary>
     /// Clears the condition statements of the SQL query source.
@@ -93,45 +95,84 @@ namespace OdeyTech.SqlProvider.Query
     /// </summary>
     /// <param name="conditions">The condition statements.</param>
     public void AddConditions(params string[] conditions)
-        => this.conditions = this.conditions == null || this.conditions.Length == 0
-                                ? conditions
-                                : this.conditions.Concat(conditions).ToArray();
+    {
+      if (this.conditions.IsNullOrEmpty())
+      {
+        this.conditions = new List<string>(conditions);
+      }
+      else
+      {
+        this.conditions.AddRange(conditions);
+      }
+    }
 
     /// <summary>
     /// Gets the condition statements of the SQL query source.
     /// </summary>
     /// <returns>The condition statements.</returns>
     public string GetConditions()
-        => this.conditions == null || this.conditions.Length == 0
-              ? string.Empty
-              : $" WHERE {string.Join(" AND ", this.conditions)}";
+      => this.conditions.IsNullOrEmpty()
+        ? string.Empty
+        : $" WHERE {string.Join(" AND ", this.conditions)}";
 
     /// <summary>
     /// Adds the order by statements to the SQL query source.
     /// </summary>
     /// <param name="orderBy">The order by statements.</param>
     public void AddOrderBy(params string[] orderBy)
-        => this.orderBy = this.orderBy == null || this.orderBy.Length == 0
-                              ? orderBy
-                              : this.orderBy.Concat(orderBy).ToArray();
+    {
+      if (this.orderBy.IsNullOrEmpty())
+      {
+        this.orderBy = new List<string>(orderBy);
+      }
+      else
+      {
+        this.orderBy.AddRange(orderBy);
+      }
+    }
 
     /// <summary>
     /// Gets the order by statements of the SQL query source.
     /// </summary>
     /// <returns>The order by statements.</returns>
     public string GetOrderBy()
-        => this.orderBy == null || this.orderBy.Length == 0
-              ? string.Empty
-              : $" ORDER BY {string.Join(", ", this.orderBy)}";
+      => this.orderBy.IsNullOrEmpty()
+        ? string.Empty
+        : $" ORDER BY {string.Join(", ", this.orderBy)}";
+
+    /// <summary>
+    /// Adds constraints to the SqlQuerySource.
+    /// </summary>
+    /// <param name="constraints">The constraints to add.</param>
+    public void AddConstraints(params IConstraint[] constraints)
+    {
+      if (this.conditions.IsNullOrEmpty())
+      {
+        this.constraints = new List<IConstraint>(constraints);
+      }
+      else
+      {
+        this.constraints.AddRange(constraints);
+      }
+    }
+
+    /// <summary>
+    /// Gets the constraints as a SQL string.
+    /// </summary>
+    /// <returns>A string representing the SQL constraints.</returns>
+    public string GetConstraints()
+      => this.constraints.IsNullOrEmpty()
+          ? string.Empty
+          : $"ALTER TABLE {GetTable()} {string.Join(", ", this.constraints.Select(c => $"ADD {c.GetConstraint()}"))}";
 
     /// <summary>
     /// Validates the SQL query source.
     /// </summary>
     /// <param name="sqlType">The type of the SQL query.</param>
-    public void Validate(SqlType sqlType)
+    public void Validate(SqlQueryType sqlType)
     {
       Check(() => string.IsNullOrEmpty(this.tableName), nameof(this.tableName));
-      if (sqlType is SqlType.Insert or SqlType.Update)
+      if (sqlType is SqlQueryType.Insert or SqlQueryType.Update)
       {
         Check(() => Columns == null || Columns.Count == 0, nameof(Columns));
       }
@@ -147,7 +188,7 @@ namespace OdeyTech.SqlProvider.Query
       {
         tableName = this.tableName,
         tablePrefix = this.tablePrefix,
-        Columns = (ColumnValues)Columns.Clone(),
+        Columns = (SqlColumns)Columns.Clone(),
         joins = this.joins,
         conditions = this.conditions,
         orderBy = this.orderBy

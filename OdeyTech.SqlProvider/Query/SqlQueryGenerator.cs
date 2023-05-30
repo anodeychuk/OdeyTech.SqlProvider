@@ -7,6 +7,7 @@
 // --------------------------------------------------------------------------
 
 using System;
+using OdeyTech.SqlProvider.Enum;
 
 namespace OdeyTech.SqlProvider.Query
 {
@@ -41,13 +42,24 @@ namespace OdeyTech.SqlProvider.Query
     }
 
     /// <summary>
+    /// Generates a CREATE TABLE query.
+    /// </summary>
+    /// <param name="source">The SqlQuerySource representing the table to create.</param>
+    /// <returns>A string representation of the generated query.</returns>
+    public static string Create(SqlQuerySource source)
+    {
+      source.Validate(SqlQueryType.Create);
+      return $"CREATE TABLE {source.GetTable()} ({source.Columns.GetColumnsType()}); {source.GetConstraints()}";
+    }
+
+    /// <summary>
     /// Generates a SELECT query.
     /// </summary>
     /// <param name="source">The SqlQuerySource to generate the query from.</param>
     /// <returns>A string representation of the generated query.</returns>
     public static string Select(SqlQuerySource source)
     {
-      source.Validate(SqlType.Select);
+      source.Validate(SqlQueryType.Select);
       return $"SELECT {source.Columns.GetColumnsName()} FROM {source.GetTable(true)}{source.GetJoins()}{source.GetConditions()}{source.GetOrderBy()};";
     }
 
@@ -58,7 +70,7 @@ namespace OdeyTech.SqlProvider.Query
     /// <returns>A string representation of the generated query.</returns>
     public static string Insert(SqlQuerySource source)
     {
-      source.Validate(SqlType.Insert);
+      source.Validate(SqlQueryType.Insert);
       return $"INSERT INTO {source.GetTable()} ({source.Columns.GetColumnsName()}) VALUES ({source.Columns.GetValues()});";
     }
 
@@ -69,7 +81,7 @@ namespace OdeyTech.SqlProvider.Query
     /// <returns>A string representation of the generated query.</returns>
     public static string Update(SqlQuerySource source)
     {
-      source.Validate(SqlType.Update);
+      source.Validate(SqlQueryType.Update);
       return $"UPDATE {source.GetTable()} SET {source.Columns.GetColumnsValue()}{source.GetConditions()};";
     }
 
@@ -80,7 +92,7 @@ namespace OdeyTech.SqlProvider.Query
     /// <returns>A string representation of the generated query.</returns>
     public static string Delete(SqlQuerySource source)
     {
-      source.Validate(SqlType.Delete);
+      source.Validate(SqlQueryType.Delete);
       return $"DELETE FROM {source.GetTable()}{source.GetConditions()};";
     }
   }

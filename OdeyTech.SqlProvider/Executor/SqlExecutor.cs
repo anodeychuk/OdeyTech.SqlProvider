@@ -20,7 +20,7 @@ namespace OdeyTech.SqlProvider.Executor
   /// </summary>
   public class SqlExecutor : ISqlExecutor
   {
-    private IDbConnection connection;
+    private readonly IDbConnection connection;
 
     /// <summary>
     /// Disposes the database connection when this object is no longer needed.
@@ -28,10 +28,13 @@ namespace OdeyTech.SqlProvider.Executor
     public void Dispose() => this.connection.Dispose();
 
     /// <summary>
-    /// Sets the database connection.
+    /// Initializes a new instance of the SqlExecutor class with the specified database connection.
     /// </summary>
     /// <param name="connection">The <see cref="IDbConnection"/> object representing the database connection.</param>
-    public void SetDbConnection(IDbConnection connection) => this.connection = connection;
+    public SqlExecutor(IDbConnection connection)
+    {
+      this.connection = connection;
+    }
 
     /// <summary>
     /// Executes a single SQL query that is an insert, update or delete statement.
@@ -261,10 +264,7 @@ namespace OdeyTech.SqlProvider.Executor
         return;
       }
 
-      foreach (var parameter in parameters)
-      {
-        parameterCollection.Add(parameter);
-      }
+      parameters.ForEach(parameter => parameterCollection.Add(parameter));
     }
   }
 }
