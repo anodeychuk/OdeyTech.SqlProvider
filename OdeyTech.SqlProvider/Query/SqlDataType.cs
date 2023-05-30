@@ -6,18 +6,39 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
+using OdeyTech.SqlProvider.DataType;
+
 namespace OdeyTech.SqlProvider.Query
 {
   /// <summary>
-  /// Data types of SQL values.
+  /// Represents a SQL data type.
   /// </summary>
-  public enum SqlDataType
+  public class SqlDataType
   {
-    INT,
-    DOUBLE,
-    VARCHAR,
-    DATE,
-    DATETIME,
-    BOOL
+    public SqlDataType(DbDataTypeCategory category, string name, string size) : this(category, name)
+    {
+      Size = size;
+    }
+
+    public SqlDataType(DbDataTypeCategory category, string name)
+    {
+      Category = category;
+      Name = name;
+    }
+
+    /// <summary>
+    /// Gets or sets the category of the SQL data type.
+    /// </summary>
+    public DbDataTypeCategory Category { get; set; }
+
+    /// <summary>
+    /// Gets or sets the data type name of the SQL column.
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// Gets or sets the size of the SQL column data type.
+    /// </summary>
+    public string Size { get; set; }
   }
 }
