@@ -7,12 +7,15 @@
     <Product>OdeyTech.SqlProvider</Product>
     <Copyright>Copyright © $(Company) 2023.</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AssemblyVersion>0.0.11</AssemblyVersion>
+    <AssemblyVersion>0.0.49</AssemblyVersion>
     <Authors>$(Company)</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Allows you to create SQL queries based on specifying columns and their types, as well as tables to which they belong and selection criteria.</Description>
     <RepositoryUrl>https://github.com/anodeychuk/OdeyTech.SqlProvider</RepositoryUrl>
     <Version>$(AssemblyVersion)</Version>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>SQL query, Query generation, Database, Database management, SQL development</PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -21,7 +24,17 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OdeyTech.ProductivityKit" Version="0.0.2" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OdeyTech.ProductivityKit" Version="0.0.19" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data.DataSetExtensions" />
