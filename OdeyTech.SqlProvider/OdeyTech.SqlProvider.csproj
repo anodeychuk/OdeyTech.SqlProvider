@@ -7,7 +7,7 @@
     <Product>OdeyTech.SqlProvider</Product>
     <Copyright>Copyright © $(Company) 2023.</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AssemblyVersion>0.0.49</AssemblyVersion>
+    <AssemblyVersion>0.0.50</AssemblyVersion>
     <Authors>$(Company)</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Allows you to create SQL queries based on specifying columns and their types, as well as tables to which they belong and selection criteria.</Description>
@@ -16,6 +16,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>SQL query, Query generation, Database, Database management, SQL development</PackageTags>
+    <PackageProjectUrl>https://github.com/anodeychuk/OdeyTech.SqlProvider</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
