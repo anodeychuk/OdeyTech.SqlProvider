@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="SqlQuerySource.cs" author="Andrii Odeychuk">
+// <copyright file="SqlTable.cs" author="Andrii Odeychuk">
 //
 // Copyright (c) Andrii Odeychuk. ALL RIGHTS RESERVED
 // The entire contents of this file is protected by International Copyright Laws.

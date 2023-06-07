@@ -1,26 +1,22 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="SqlValue.cs" author="Andrii Odeychuk">
+// <copyright file="IDatabaseConfig.cs" author="Andrii Odeychuk">
 //
 // Copyright (c) Andrii Odeychuk. ALL RIGHTS RESERVED
 // The entire contents of this file is protected by International Copyright Laws.
 // </copyright>
 // --------------------------------------------------------------------------
 
-namespace OdeyTech.SqlProvider.Query
+namespace OdeyTech.SqlProvider.Entity.Database
 {
   /// <summary>
-  /// Value of a SQL column.
+  /// Defines the configuration for a database.
   /// </summary>
-  public class SqlValue
+  public interface IDatabaseConfig
   {
     /// <summary>
-    /// Value of the SQL column.
+    /// Gets the connection string for the database.
     /// </summary>
-    public object Value { get; set; }
-
-    /// <summary>
-    /// Data type of the SQL column.
-    /// </summary>
-    public SqlDataType DataType { get; set; }
+    /// <returns>The connection string.</returns>
+    string GetConnectionString();
   }
 }

@@ -7,6 +7,7 @@
 // --------------------------------------------------------------------------
 
 using System;
+using OdeyTech.SqlProvider.Entity.Table;
 using OdeyTech.SqlProvider.Enum;
 
 namespace OdeyTech.SqlProvider.Query
@@ -44,56 +45,56 @@ namespace OdeyTech.SqlProvider.Query
     /// <summary>
     /// Generates a CREATE TABLE query.
     /// </summary>
-    /// <param name="source">The SqlQuerySource representing the table to create.</param>
+    /// <param name="table">The <see cref="SqlTable"/> representing the table to create.</param>
     /// <returns>A string representation of the generated query.</returns>
-    public static string Create(SqlQuerySource source)
+    public static string Create(SqlTable table)
     {
-      source.Validate(SqlQueryType.Create);
-      return $"CREATE TABLE {source.GetTable()} ({source.Columns.GetColumnsType()}); {source.GetConstraints()}";
+      table.Validate(SqlQueryType.Create);
+      return $"CREATE TABLE {table.GetName()} ({table.Columns.GetColumnsDataType()});";
     }
 
     /// <summary>
     /// Generates a SELECT query.
     /// </summary>
-    /// <param name="source">The SqlQuerySource to generate the query from.</param>
+    /// <param name="table">The <see cref="SqlTable"/> to generate the query from.</param>
     /// <returns>A string representation of the generated query.</returns>
-    public static string Select(SqlQuerySource source)
+    public static string Select(SqlTable table)
     {
-      source.Validate(SqlQueryType.Select);
-      return $"SELECT {source.Columns.GetColumnsName()} FROM {source.GetTable(true)}{source.GetJoins()}{source.GetConditions()}{source.GetOrderBy()};";
+      table.Validate(SqlQueryType.Select);
+      return $"SELECT {table.Columns.GetColumnsName(SqlQueryType.Select)} FROM {table.GetName(true)}{table.GetJoins()}{table.GetConditions()}{table.GetOrderBy()};";
     }
 
     /// <summary>
     /// Generates an INSERT query.
     /// </summary>
-    /// <param name="source">The SqlQuerySource to generate the query from.</param>
+    /// <param name="table">The <see cref="SqlTable"/> to generate the query from.</param>
     /// <returns>A string representation of the generated query.</returns>
-    public static string Insert(SqlQuerySource source)
+    public static string Insert(SqlTable table)
     {
-      source.Validate(SqlQueryType.Insert);
-      return $"INSERT INTO {source.GetTable()} ({source.Columns.GetColumnsName()}) VALUES ({source.Columns.GetValues()});";
+      table.Validate(SqlQueryType.Insert);
+      return $"INSERT INTO {table.GetName()} ({table.Columns.GetColumnsName(SqlQueryType.Insert)}) VALUES ({table.Columns.GetValues()});";
     }
 
     /// <summary>
     /// Generates an UPDATE query.
     /// </summary>
-    /// <param name="source">The SqlQuerySource to generate the query from.</param>
+    /// <param name="table">The <see cref="SqlTable"/> to generate the query from.</param>
     /// <returns>A string representation of the generated query.</returns>
-    public static string Update(SqlQuerySource source)
+    public static string Update(SqlTable table)
     {
-      source.Validate(SqlQueryType.Update);
-      return $"UPDATE {source.GetTable()} SET {source.Columns.GetColumnsValue()}{source.GetConditions()};";
+      table.Validate(SqlQueryType.Update);
+      return $"UPDATE {table.GetName()} SET {table.Columns.GetColumnsValue()}{table.GetConditions()};";
     }
 
     /// <summary>
     /// Generates a DELETE query.
     /// </summary>
-    /// <param name="source">The SqlQuerySource to generate the query from.</param>
+    /// <param name="table">The <see cref="SqlTable"/> to generate the query from.</param>
     /// <returns>A string representation of the generated query.</returns>
-    public static string Delete(SqlQuerySource source)
+    public static string Delete(SqlTable table)
     {
-      source.Validate(SqlQueryType.Delete);
-      return $"DELETE FROM {source.GetTable()}{source.GetConditions()};";
+      table.Validate(SqlQueryType.Delete);
+      return $"DELETE FROM {table.GetName()}{table.GetConditions()};";
     }
   }
 }

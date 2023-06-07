@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="SqlQuerySource.cs" author="Andrii Odeychuk">
+// <copyright file="SqlTable.cs" author="Andrii Odeychuk">
 //
 // Copyright (c) Andrii Odeychuk. ALL RIGHTS RESERVED
 // The entire contents of this file is protected by International Copyright Laws.
@@ -8,61 +8,59 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using OdeyTech.ProductivityKit.Extension;
+using OdeyTech.SqlProvider.Entity.Table.Column;
 using OdeyTech.SqlProvider.Enum;
-using OdeyTech.SqlProvider.Query.Constraint;
 
-namespace OdeyTech.SqlProvider.Query
+namespace OdeyTech.SqlProvider.Entity.Table
 {
   /// <summary>
-  /// SQL query source.
+  /// Represents a SQL table in a database.
   /// </summary>
-  public class SqlQuerySource : ICloneable
+  public class SqlTable : ICloneable
   {
     private string tableName;
     private string tablePrefix;
     private List<string> joins;
     private List<string> conditions;
     private List<string> orderBy;
-    private List<IConstraint> constraints;
 
     /// <summary>
-    /// Columns of the SQL query source.
+    /// Gets or sets the columns of the SQL table.
     /// </summary>
     public SqlColumns Columns { get; private set; } = new();
 
     /// <summary>
-    /// Sets the table name and prefix of the SQL query source.
+    /// Sets the name and prefix of the SQL table.
     /// </summary>
     /// <param name="tableName">The name of the table.</param>
     /// <param name="tablePrefix">The prefix of the table.</param>
-    public void SetTable(string tableName, string tablePrefix = null)
+    public void SetName(string tableName, string tablePrefix = null)
     {
       this.tableName = tableName;
       this.tablePrefix = tablePrefix;
     }
 
     /// <summary>
-    /// Gets the table name of the SQL query source.
+    /// Gets the name of the SQL table.
     /// </summary>
-    /// <param name="withPrefix">Indicates whether to include the table prefix in the table name.</param>
+    /// <param name="withPrefix">Indicates whether to include the table prefix in the name.</param>
     /// <returns>The table name.</returns>
-    public string GetTable(bool withPrefix = false)
+    public string GetName(bool withPrefix = false)
     {
       var prefix = withPrefix && !string.IsNullOrEmpty(this.tablePrefix) ? $" {this.tablePrefix}" : string.Empty;
       return $"{this.tableName}{prefix}";
     }
 
     /// <summary>
-    /// Clears the join statements of the SQL query source.
+    /// Clears the join statements associated with the SQL table.
     /// </summary>
     public void ClearJoins() => this.joins = null;
 
     /// <summary>
-    /// Adds the join statements to the SQL query source.
+    /// Adds join statements to the SQL table.
     /// </summary>
-    /// <param name="joins">The join statements.</param>
+    /// <param name="joins">The join statements to add.</param>
     public void AddJoins(params string[] joins)
     {
 
@@ -77,7 +75,7 @@ namespace OdeyTech.SqlProvider.Query
     }
 
     /// <summary>
-    /// Gets the join statements of the SQL query source.
+    /// Gets the join statements associated with the SQL table.
     /// </summary>
     /// <returns>The join statements.</returns>
     public string GetJoins()
@@ -86,14 +84,14 @@ namespace OdeyTech.SqlProvider.Query
         : $" {string.Join(" ", this.joins)}";
 
     /// <summary>
-    /// Clears the condition statements of the SQL query source.
+    /// Clears the condition statements associated with the SQL table.
     /// </summary>
     public void ClearConditions() => this.conditions = null;
 
     /// <summary>
-    /// Adds the condition statements to the SQL query source.
+    /// Adds condition statements to the SQL table.
     /// </summary>
-    /// <param name="conditions">The condition statements.</param>
+    /// <param name="conditions">The condition statements to add.</param>
     public void AddConditions(params string[] conditions)
     {
       if (this.conditions.IsNullOrEmpty())
@@ -107,7 +105,7 @@ namespace OdeyTech.SqlProvider.Query
     }
 
     /// <summary>
-    /// Gets the condition statements of the SQL query source.
+    /// Gets the condition statements associated with the SQL table.
     /// </summary>
     /// <returns>The condition statements.</returns>
     public string GetConditions()
@@ -116,9 +114,14 @@ namespace OdeyTech.SqlProvider.Query
         : $" WHERE {string.Join(" AND ", this.conditions)}";
 
     /// <summary>
-    /// Adds the order by statements to the SQL query source.
+    /// Clears the order by statements associated with the SQL table.
     /// </summary>
-    /// <param name="orderBy">The order by statements.</param>
+    public void ClearOrderBy() => this.orderBy = null;
+
+    /// <summary>
+    /// Adds order by statements to the SQL table.
+    /// </summary>
+    /// <param name="orderBy">The order by statements to add.</param>
     public void AddOrderBy(params string[] orderBy)
     {
       if (this.orderBy.IsNullOrEmpty())
@@ -132,7 +135,7 @@ namespace OdeyTech.SqlProvider.Query
     }
 
     /// <summary>
-    /// Gets the order by statements of the SQL query source.
+    /// Gets the order by statements associated with the SQL table.
     /// </summary>
     /// <returns>The order by statements.</returns>
     public string GetOrderBy()
@@ -141,32 +144,7 @@ namespace OdeyTech.SqlProvider.Query
         : $" ORDER BY {string.Join(", ", this.orderBy)}";
 
     /// <summary>
-    /// Adds constraints to the SqlQuerySource.
-    /// </summary>
-    /// <param name="constraints">The constraints to add.</param>
-    public void AddConstraints(params IConstraint[] constraints)
-    {
-      if (this.conditions.IsNullOrEmpty())
-      {
-        this.constraints = new List<IConstraint>(constraints);
-      }
-      else
-      {
-        this.constraints.AddRange(constraints);
-      }
-    }
-
-    /// <summary>
-    /// Gets the constraints as a SQL string.
-    /// </summary>
-    /// <returns>A string representing the SQL constraints.</returns>
-    public string GetConstraints()
-      => this.constraints.IsNullOrEmpty()
-          ? string.Empty
-          : $"ALTER TABLE {GetTable()} {string.Join(", ", this.constraints.Select(c => $"ADD {c.GetConstraint()}"))}";
-
-    /// <summary>
-    /// Validates the SQL query source.
+    /// Validates the SQL table for a specific SQL query type.
     /// </summary>
     /// <param name="sqlType">The type of the SQL query.</param>
     public void Validate(SqlQueryType sqlType)
@@ -179,12 +157,12 @@ namespace OdeyTech.SqlProvider.Query
     }
 
     /// <summary>
-    /// Creates a deep copy of the SQL query source.
+    /// Creates a deep copy of the SQL table.
     /// </summary>
-    /// <returns>A copy of the SQL query source.</returns>
+    /// <returns>A copy of the SQL table.</returns>
     public object Clone()
     {
-      var query = new SqlQuerySource
+      var query = new SqlTable
       {
         tableName = this.tableName,
         tablePrefix = this.tablePrefix,
@@ -197,9 +175,9 @@ namespace OdeyTech.SqlProvider.Query
     }
 
     /// <summary>
-    /// Checks the condition, and throws <see cref="ArgumentNullException"/> if the condition is true.
+    /// Checks a condition and throws an exception if it is true.
     /// </summary>
-    /// <param name="action">The action to check for null.</param>
+    /// <param name="condition">The condition to check.</param>
     /// <param name="paramName">The name of the parameter.</param>
     private void Check(Func<bool> action, string paramName)
     {
@@ -214,12 +192,12 @@ namespace OdeyTech.SqlProvider.Query
     /// </summary>
     /// <param name="obj">The object to compare with the current object.</param>
     /// <returns>True if the objects are equal based on the hash code, otherwise false.</returns>
-    public override bool Equals(object obj) => obj is SqlQuerySource query && query.GetHashCode() == GetHashCode();
+    public override bool Equals(object obj) => obj is SqlTable query && query.GetHashCode() == GetHashCode();
 
     /// <summary>
-    /// Gets the hash code of the SQL query source based on its properties.
+    /// Gets the hash code of the SQL table based on its properties.
     /// </summary>
-    /// <returns>The hash code of the SQL query source.</returns>
-    public override int GetHashCode() => (this.tableName, this.tablePrefix, Columns.GetColumnsValue(), GetJoins(), GetConditions(), GetOrderBy()).GetHashCode();
+    /// <returns>The hash code of the SQL table.</returns>
+    public override int GetHashCode() => (this.tableName, this.tablePrefix, Columns.GetColumnsDataType(), GetJoins(), GetConditions(), GetOrderBy()).GetHashCode();
   }
 }
