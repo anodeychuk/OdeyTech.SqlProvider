@@ -28,7 +28,7 @@ namespace OdeyTech.SqlProvider.Executor
     public void Dispose() => this.connection.Dispose();
 
     /// <summary>
-    /// Initializes a new instance of the SqlExecutor class with the specified database connection.
+    /// Initializes a new instance of the <see cref="SqlExecutor"/> class with the specified database connection.
     /// </summary>
     /// <param name="connection">The <see cref="IDbConnection"/> object representing the database connection.</param>
     public SqlExecutor(IDbConnection connection)
@@ -36,11 +36,7 @@ namespace OdeyTech.SqlProvider.Executor
       this.connection = connection;
     }
 
-    /// <summary>
-    /// Executes a single SQL query that is an insert, update or delete statement.
-    /// </summary>
-    /// <param name="query">The SQL query to execute.</param>
-    /// <param name="parameters">The parameters for the query.</param>
+    /// <inheritdoc/>
     public void Query(string query, params DbParameter[] parameters)
     {
       if (string.IsNullOrEmpty(query))
@@ -72,11 +68,7 @@ namespace OdeyTech.SqlProvider.Executor
       }
     }
 
-    /// <summary>
-    /// Executes multiple SQL queries that are insert, update or delete statements.
-    /// </summary>
-    /// <param name="queries">The collection of SQL queries to execute.</param>
-    /// <param name="parameters">The parameters for the queries.</param>
+    /// <inheritdoc/>
     public void Query(IEnumerable<string> queries, params DbParameter[] parameters)
     {
       if (queries == null || !queries.Any())
@@ -111,12 +103,7 @@ namespace OdeyTech.SqlProvider.Executor
       }
     }
 
-    /// <summary>
-    /// Executes an SQL query that selects data from a database.
-    /// </summary>
-    /// <param name="query">The SQL query to execute.</param>
-    /// <param name="parameters">The parameters for the query.</param>
-    /// <returns>The selected data as a DataTable object.</returns>
+    /// <inheritdoc/>
     public DataTable Select(string query, params DbParameter[] parameters)
     {
       var dataTable = new DataTable();
@@ -143,12 +130,7 @@ namespace OdeyTech.SqlProvider.Executor
       return dataTable;
     }
 
-    /// <summary>
-    /// Executes a stored procedure in a database.
-    /// </summary>
-    /// <param name="storeProcedureName">The name of the stored procedure to execute.</param>
-    /// <param name="parameters">The parameters for the stored procedure
-    /// <returns>A list of output parameters returned by the stored procedure.</returns>
+    /// <inheritdoc/>
     public List<DbParameter> StoreProcedure(string storeProcedureName, params DbParameter[] parameters)
     {
       List<DbParameter> outputParameters = new();
@@ -182,12 +164,7 @@ namespace OdeyTech.SqlProvider.Executor
       return outputParameters;
     }
 
-    /// <summary>
-    /// Executes a stored function in a database.
-    /// </summary>
-    /// <param name="storeFunctionName">The name of the stored function to execute.</param>
-    /// <param name="parameters">The parameters for the stored function.</param>
-    /// <returns>The result returned by the stored function.</returns>
+    /// <inheritdoc/>
     public object StoreFunction(string storeFunctionName, params DbParameter[] parameters)
     {
       object result = null;

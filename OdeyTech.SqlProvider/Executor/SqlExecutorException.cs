@@ -18,20 +18,20 @@ namespace OdeyTech.SqlProvider.Executor
   public class SqlExecutorException : Exception
   {
     /// <summary>
-    /// Initializes a new instance of the SqlExecutorException class.
+    /// Initializes a new instance of the <see cref="SqlExecutorException"/> class.
     /// </summary>
     public SqlExecutorException() : base()
     { }
 
     /// <summary>
-    /// Initializes a new instance of the SqlExecutorException class with the specified error message.
+    /// Initializes a new instance of the <see cref="SqlExecutorException"/> class with the specified error message.
     /// </summary>
     /// <param name="message">The error message that explains the reason for the exception.</param>
     public SqlExecutorException(string message) : base(message)
     { }
 
     /// <summary>
-    /// Initializes a new instance of the SqlExecutorException class with the specified error message and inner exception.
+    /// Initializes a new instance of the <see cref="SqlExecutorException"/> class with the specified error message and inner exception.
     /// </summary>
     /// <param name="message">The error message that explains the reason for the exception.</param>
     /// <param name="innerException">The inner exception that caused the current exception.</param>
@@ -39,14 +39,14 @@ namespace OdeyTech.SqlProvider.Executor
     { }
 
     /// <summary>
-    /// Initializes a new instance of the SqlExecutorException class with the specified SQL exception.
+    /// Initializes a new instance of the <see cref="SqlExecutorException"/> class with the specified SQL exception.
     /// </summary>
     /// <param name="exception">The SQL exception that caused the exception.</param>
     public SqlExecutorException(SqlException exception) : base(GetSqlExceptionMessage(exception))
     { }
 
     /// <summary>
-    /// Error message for a SQL exception.
+    /// Gets the error message for a SQL exception.
     /// </summary>
     /// <param name="exception">The SQL exception.</param>
     /// <returns>The error message.</returns>
