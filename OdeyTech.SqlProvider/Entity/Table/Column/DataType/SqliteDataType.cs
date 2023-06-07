@@ -6,12 +6,12 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-namespace OdeyTech.SqlProvider.DataType
+namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
   /// <summary>
   /// Represents an SQLite data type.
   /// </summary>
-  public class SqliteDataType : IDbDataType
+  public class SqliteDataType : DbDataType
   {
     /// <summary>
     /// Enum representing the various data types in SQLite.
@@ -22,11 +22,13 @@ namespace OdeyTech.SqlProvider.DataType
       Real,
       Text,
       Blob,
+      Date,
+      DateTime,
       Null
     }
 
     /// <summary>
-    /// Initializes a new instance of the SqliteDataType class with the specified type and size.
+    /// Initializes a new instance of the <see cref="SqliteDataType"/> class with the specified type and size.
     /// </summary>
     /// <param name="type">The SQLite data type.</param>
     /// <param name="size">The size of the SQLite data type.</param>
@@ -36,23 +38,14 @@ namespace OdeyTech.SqlProvider.DataType
     }
 
     /// <summary>
-    /// Initializes a new instance of the SqliteDataType class with the specified type.
+    /// Initializes a new instance of the <see cref="SqliteDataType"/> class with the specified type.
     /// </summary>
     /// <param name="type">The SQLite data type.</param>
     public SqliteDataType(SqliteDataType.DataType type)
     {
-      TypeName = type.ToString();
+      TypeName = GetTypeName(type);
       Category = GetTypeCategory(type);
     }
-
-    /// <inheritdoc/>
-    public string TypeName { get; }
-
-    /// <inheritdoc/>
-    public DbDataTypeCategory Category { get; }
-
-    /// <inheritdoc/>
-    public string Size { get; set; }
 
     /// <summary>
     /// Determines the category of an SQLite data type.
@@ -78,6 +71,18 @@ namespace OdeyTech.SqlProvider.DataType
         default:
           return DbDataTypeCategory.Other;
       }
+    }
+
+    private string GetTypeName(DataType type)
+    {
+      switch (type)
+      {
+        case DataType.Date:
+        case DataType.DateTime:
+          return DataType.Integer.ToString();
+      }
+
+      return type.ToString();
     }
   }
 }

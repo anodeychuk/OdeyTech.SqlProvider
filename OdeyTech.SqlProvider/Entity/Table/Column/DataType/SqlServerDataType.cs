@@ -6,14 +6,12 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-using System.Drawing;
-
-namespace OdeyTech.SqlProvider.DataType
+namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
   /// <summary>
   /// Represents a SQL Server data type.
   /// </summary>
-  public class SqlServerDataType : IDbDataType
+  public class SqlServerDataType : DbDataType
   {
     /// <summary>
     /// Enum representing the various data types in SQL Server.
@@ -56,7 +54,7 @@ namespace OdeyTech.SqlProvider.DataType
     }
 
     /// <summary>
-    /// Initializes a new instance of the SqlServerDataType class with the specified type and size.
+    /// Initializes a new instance of the <see cref="SqlServerDataType"/> class with the specified type and size.
     /// </summary>
     /// <param name="type">The SQL Server data type.</param>
     /// <param name="size">The size of the SQL Server data type.</param>
@@ -74,15 +72,6 @@ namespace OdeyTech.SqlProvider.DataType
       TypeName = type.ToString();
       Category = GetTypeCategory(type);
     }
-
-    /// <inheritdoc/>
-    public string TypeName { get; }
-
-    /// <inheritdoc/>
-    public DbDataTypeCategory Category { get; }
-
-    /// <inheritdoc/>
-    public string Size { get; set; }
 
     /// <summary>
     /// Determines the category of a SQL Server data type.

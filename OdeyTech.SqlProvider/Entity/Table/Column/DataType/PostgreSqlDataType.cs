@@ -6,14 +6,12 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-using System.Drawing;
-
-namespace OdeyTech.SqlProvider.DataType
+namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
   /// <summary>
   /// Represents a PostgreSQL data type.
   /// </summary>
-  public class PostgreSqlDataType : IDbDataType
+  public class PostgreSqlDataType : DbDataType
   {
     /// <summary>
     /// Enum representing the various data types in PostgreSQL.
@@ -62,7 +60,7 @@ namespace OdeyTech.SqlProvider.DataType
     }
 
     /// <summary>
-    /// Initializes a new instance of the PostgreSqlDataType class with the specified type and size.
+    /// Initializes a new instance of the <see cref="PostgreSqlDataType"/> class with the specified type and size.
     /// </summary>
     /// <param name="type">The PostgreSQL data type.</param>
     /// <param name="size">The size of the PostgreSQL data type.</param>
@@ -72,7 +70,7 @@ namespace OdeyTech.SqlProvider.DataType
     }
 
     /// <summary>
-    /// Initializes a new instance of the PostgreSqlDataType class with the specified type.
+    /// Initializes a new instance of the <see cref="PostgreSqlDataType"/> class with the specified type.
     /// </summary>
     /// <param name="type">The PostgreSQL data type.</param>
     public PostgreSqlDataType(PostgreSqlDataType.DataType type)
@@ -80,15 +78,6 @@ namespace OdeyTech.SqlProvider.DataType
       TypeName = type.ToString();
       Category = GetTypeCategory(type);
     }
-
-    /// <inheritdoc/>
-    public string TypeName { get; }
-
-    /// <inheritdoc/>
-    public DbDataTypeCategory Category { get; }
-
-    /// <inheritdoc/>
-    public string Size { get; set; }
 
     /// <summary>
     /// Determines the category of a PostgreSQL data type.

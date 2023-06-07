@@ -6,7 +6,7 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-namespace OdeyTech.SqlProvider.DataType
+namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
   /// <summary>
   /// Represents a database data type.
@@ -21,7 +21,7 @@ namespace OdeyTech.SqlProvider.DataType
     /// <summary>
     /// Gets or sets the size of the SQL column data type.
     /// </summary>
-    string Size { get; set; }
+    string Size { get; }
 
     /// <summary>
     /// Gets the category of the data type.

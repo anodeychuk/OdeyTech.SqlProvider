@@ -6,12 +6,12 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-namespace OdeyTech.SqlProvider.DataType
+namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
   /// <summary>
   /// Represents an Oracle data type.
   /// </summary>
-  public class OracleDataType : IDbDataType
+  public class OracleDataType : DbDataType
   {
     /// <summary>
     /// Enum representing the various data types in Oracle.
@@ -43,7 +43,7 @@ namespace OdeyTech.SqlProvider.DataType
     }
 
     /// <summary>
-    /// Initializes a new instance of the OracleDataType class with the specified type and size.
+    /// Initializes a new instance of the <see cref="OracleDataType"/> class with the specified type and size.
     /// </summary>
     /// <param name="type">The Oracle data type.</param>
     /// <param name="size">The size of the Oracle data type.</param>
@@ -53,7 +53,7 @@ namespace OdeyTech.SqlProvider.DataType
     }
 
     /// <summary>
-    /// Initializes a new instance of the OracleDataType class with the specified type.
+    /// Initializes a new instance of the <see cref="OracleDataType"/> class with the specified type.
     /// </summary>
     /// <param name="type">The Oracle data type.</param>
     public OracleDataType(OracleDataType.DataType type)
@@ -61,15 +61,6 @@ namespace OdeyTech.SqlProvider.DataType
       TypeName = type.ToString();
       Category = GetTypeCategory(type);
     }
-
-    /// <inheritdoc/>
-    public string TypeName { get; }
-
-    /// <inheritdoc/>
-    public DbDataTypeCategory Category { get; }
-
-    /// <inheritdoc/>
-    public string Size { get; set; }
 
     /// <summary>
     /// Determines the category of an Oracle data type.

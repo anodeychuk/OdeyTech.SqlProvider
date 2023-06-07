@@ -6,12 +6,12 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-namespace OdeyTech.SqlProvider.DataType
+namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
   /// <summary>
   /// Represents a MySQL data type.
   /// </summary>
-  public class MySqlDataType : IDbDataType
+  public class MySqlDataType : DbDataType
   {
     /// <summary>
     /// Enum representing the various data types in MySQL.
@@ -48,7 +48,7 @@ namespace OdeyTech.SqlProvider.DataType
     }
 
     /// <summary>
-    /// Initializes a new instance of the MySqlDataType class with the specified type and size.
+    /// Initializes a new instance of the <see cref="MySqlDataType"/> class with the specified type and size.
     /// </summary>
     /// <param name="type">The MySQL data type.</param>
     /// <param name="size">The size of the MySQL data type.</param>
@@ -58,7 +58,7 @@ namespace OdeyTech.SqlProvider.DataType
     }
 
     /// <summary>
-    /// Initializes a new instance of the MySqlDataType class with the specified type.
+    /// Initializes a new instance of the <see cref="MySqlDataType"/> class with the specified type.
     /// </summary>
     /// <param name="type">The MySQL data type.</param>
     public MySqlDataType(MySqlDataType.DataType type)
@@ -66,15 +66,6 @@ namespace OdeyTech.SqlProvider.DataType
       TypeName = type.ToString();
       Category = GetTypeCategory(type);
     }
-
-    /// <inheritdoc/>
-    public string TypeName { get; }
-
-    /// <inheritdoc/>
-    public DbDataTypeCategory Category { get; }
-
-    /// <inheritdoc/>
-    public string Size { get; set; }
 
     /// <summary>
     /// Determines the category of a MySQL data type.

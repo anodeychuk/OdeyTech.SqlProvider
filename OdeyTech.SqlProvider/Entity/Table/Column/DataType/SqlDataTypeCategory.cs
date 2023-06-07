@@ -6,20 +6,18 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-namespace OdeyTech.SqlProvider.DataType
+namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
   /// <summary>
   /// Data types of SQL values.
   /// </summary>
-  public enum DbDataTypeCategory
+  public enum SqlDataTypeCategory
   {
-    Int,
-    Double,
-    String,
-    Date,
-    DateTime,
-    Boolean,
-    Binary,
-    Other
+    INT,
+    DOUBLE,
+    VARCHAR,
+    DATE,
+    DATETIME,
+    BOOL
   }
 }
