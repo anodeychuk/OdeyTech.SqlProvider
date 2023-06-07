@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="ForeignKey.cs" author="Andrii Odeychuk">
+// <copyright file="ForeignKeyConstraint.cs" author="Andrii Odeychuk">
 //
 // Copyright (c) Andrii Odeychuk. ALL RIGHTS RESERVED
 // The entire contents of this file is protected by International Copyright Laws.
@@ -8,38 +8,16 @@
 
 using System.Text;
 using OdeyTech.ProductivityKit.Extension;
-using OdeyTech.SqlProvider.Enum;
 
-namespace OdeyTech.SqlProvider.Query.Constraint
+namespace OdeyTech.SqlProvider.Entity.Table.Column.Constraint
 {
   /// <summary>
   /// Foreign key constraint.
   /// </summary>
-  public class ForeignKey : IConstraint
+  public class ForeignKeyConstraint : IConstraint
   {
-    /// <summary>
-    /// Gets the type of the SQL constraint.
-    /// </summary>
-    public SqlConstraintType Type => SqlConstraintType.FOREIGN;
-
-    /// <summary>
-    /// Generates a SQL constraint for a foreign key.
-    /// </summary>
-    /// <returns>
-    /// A SQL string representing the foreign key constraint.
-    /// </returns>
-    public string GetConstraint()
-    {
-      var sb = new StringBuilder();
-      if (ConstraintName.IsFilled())
-      {
-        sb.Append($"CONSTRAINT {ConstraintName} ");
-      }
-
-      sb.Append($"FOREIGN KEY ({ColumnName}) REFERENCES {ReferenceTable}({ReferenceColumn})");
-
-      return sb.ToString();
-    }
+    /// <inheritdoc/>
+    public SqlConstraintType Type => SqlConstraintType.Foreign;
 
     /// <summary>
     /// Gets or sets the name of the foreign key constraint.
@@ -60,5 +38,22 @@ namespace OdeyTech.SqlProvider.Query.Constraint
     /// Gets or sets the name of the referenced column in the foreign key constraint.
     /// </summary>
     public string ReferenceColumn { get; set; }
+
+    /// <summary>
+    /// Generates a SQL constraint for a foreign key.
+    /// </summary>
+    /// <returns>A SQL string representing the foreign key constraint.</returns>
+    public override string ToString()
+    {
+      var sb = new StringBuilder();
+      if (ConstraintName.IsFilled())
+      {
+        sb.Append($"CONSTRAINT {ConstraintName} ");
+      }
+
+      sb.Append($"Foreign KEY ({ColumnName}) REFERENCES {ReferenceTable}({ReferenceColumn})");
+
+      return sb.ToString();
+    }
   }
 }

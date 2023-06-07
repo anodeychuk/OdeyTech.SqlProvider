@@ -6,9 +6,7 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-using OdeyTech.SqlProvider.Enum;
-
-namespace OdeyTech.SqlProvider.Query.Constraint
+namespace OdeyTech.SqlProvider.Entity.Table.Column.Constraint
 {
   /// <summary>
   /// Represents a database constraint.
@@ -24,13 +22,5 @@ namespace OdeyTech.SqlProvider.Query.Constraint
     /// Gets or sets the name of the constraint.
     /// </summary>
     string ConstraintName { get; set; }
-
-    /// <summary>
-    /// Gets the SQL constraint.
-    /// </summary>
-    /// <returns>
-    /// A SQL string representing the constraint.
-    /// </returns>
-    string GetConstraint();
   }
 }
