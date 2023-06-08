@@ -1,14 +1,16 @@
 # OdeyTech.SqlProvider
 
-**OdeyTech.SqlProvider** is a robust, user-friendly, and efficient C# library designed to simplify and streamline SQL query generation and execution for .NET applications.
+**OdeyTech.SqlProvider** is a robust, user-friendly, and efficient C# library designed to simplify and optimize the formation and execution of SQL queries for most popular RDBMS (MySQL, SQL Server, PostgreSQL, Oracle, SQLite) in .NET applications.
 
 ## Features
 
 - **Strongly-typed Column and Table Definitions**: The library provides strongly-typed column and table definitions, which enhance maintainability and reduce errors in your code.
 - **Flexible Query Generation**: With `OdeyTech.SqlProvider`, you can easily build complex SQL queries using the `SqlQueryGenerator` utility. It supports various query types such as `CREATE TABLE`, `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, utilizing the `SqlQuerySource` object.
     - **`SqlQueryGenerator`**: This powerful utility enables you to generate different types of SQL queries, leveraging the capabilities of the `SqlQuerySource` object.
-    - **`SqlQuerySource`**: This flexible and extensible class allows you to define the structure of your SQL queries, including table names, columns, join statements, conditions, and more.
-    - **`SqlColumns`**: Represents a collection of column values for use in SQL queries. It provides methods to add, update, or exclude columns and their values easily.
+    - **`SqlTable`**: This class represents a SQL table in a database, providing a structured way to interact with and manipulate the table. It allows for the setting and retrieval of table names, prefix, and columns, as well as the adding and clearing of join, condition, and order by statements.
+    - **`SqlColumns`**: This class represents the columns of a SQL table, providing a structured way to interact with and manipulate the columns.
+	- **`SqlColumn`**: This class represents a column in a SQL query. It provides a structured way to define and interact with a column, including its name, data type, alias, and converters for value and name.
+- **Automated Database Verification and Creation**: The library includes built-in verification to check for the existence of the database and its necessary structures, such as tables and their relationships. If they are absent, it also has the capability to create them.	
 - **Intuitive API**: The library offers an intuitive and easy-to-understand API, catering to both experienced and novice developers.
 - **Comprehensive Query Execution**: `OdeyTech.SqlProvider` provides comprehensive query execution features, including support for stored procedures and functions.
 - **Lightweight and Efficient**: The library is designed to be lightweight and efficient, ensuring optimal performance in projects of any size.
@@ -26,60 +28,51 @@ ISqlExecutor sqlExecutor = new SqlExecutor();
 sqlExecutor.SetDbConnection(new SqlConnection(dbConfig.GetConnectionString()));
 
 // Define a SqlQuerySource
-SqlQuerySource querySource = new SqlQuerySource();
-querySource.SetTable("Users");
+SqlTable tableSource = new SqlTable();
+tableSource.SetName("Users");
 
 // Define columns for the SQL query source
-SqlColumns columns = new SqlColumns();
-columns.AddColumn("Id", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.Int)));
-columns.AddColumn("FirstName", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar)));
-columns.AddColumn("LastName", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar)));
-columns.AddColumn("Email", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar)));
+tableSource.Columns.AddColumn("Id", new MySqlDataType(MySqlDataType.DataType.Int));
+tableSource.Columns.AddColumn("FirstName", new MySqlDataType(MySqlDataType.DataType.VarChar));
+tableSource.Columns.AddColumn("LastName", new MySqlDataType(MySqlDataType.DataType.VarChar));
+tableSource.Columns.AddColumn("Email", new MySqlDataType(MySqlDataType.DataType.VarChar));
 
 // Add primary key constraint for the "Id" column
-PrimaryKey primaryKey = new PrimaryKey();
-primaryKey.ColumnNames = new List<string> { "Id" };
-querySource.AddConstraints(primaryKey);
-
-querySource.Columns = columns;
+var primaryKey = new PrimaryKeyConstraint() { ColumnNames = new List<string> { "Id" } };
+tableSource.Columns.AddConstraints(primaryKey);
 
 // CREATE TABLE Example
-string createTableQuery = SqlQueryGenerator.Create(querySource);
+string createTableQuery = SqlQueryGenerator.Create(tableSource);
 sqlExecutor.ExecuteNonQuery(createTableQuery);
 
 // SELECT Example
-string selectQuery = SqlQueryGenerator.Select(querySource);
+string selectQuery = SqlQueryGenerator.Select(tableSource);
 DataTable result = sqlExecutor.Select(selectQuery);
 
 // INSERT Example
-SqlColumns insertColumns = new SqlColumns();
-insertColumns.AddColumn("FirstName", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar), "John"));
-insertColumns.AddColumn("LastName", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar), "Doe"));
-insertColumns.AddColumn("Email", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar), "john.doe@example.com"));
+tableSource.Columns.SetValue("Id", 1));
+tableSource.Columns.SetValue("FirstName", "John"));
+tableSource.Columns.SetValue("LastName", "Doe"));
+tableSource.Columns.SetValue("Email", "john.doe@example.com"));
 
-querySource.Columns = insertColumns;
-
-string insertQuery = SqlQueryGenerator.Insert(querySource);
+string insertQuery = SqlQueryGenerator.Insert(tableSource);
 int insertResult = sqlExecutor.ExecuteNonQuery(insertQuery);
 
 // UPDATE Example
-SqlColumns updateColumns = new SqlColumns();
-updateColumns.AddColumn("FirstName", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar), "Jane"));
-updateColumns.AddColumn("LastName", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar), "Doe"));
-updateColumns.AddColumn("Email", new SqlColumnParameters(new MySqlDataType(MySqlDataType.DataType.VarChar), "jane.doe@example.com"));
+tableSource.Columns.GetColumn("Id").IsExcluded = true;
+tableSource.Columns.SetValue("FirstName", "John"));
+tableSource.Columns.SetValue("LastName", "Doe"));
+tableSource.Columns.SetValue("Email", "john.doe@example.com"));
+tableSource.AddConditions("Id = 1");
 
-querySource.Columns = updateColumns;
-querySource.ClearConditions();
-querySource.AddConditions("Id = 1");
-
-string updateQuery = SqlQueryGenerator.Update(querySource);
+string updateQuery = SqlQueryGenerator.Update(tableSource);
 int updateResult = sqlExecutor.ExecuteNonQuery(updateQuery);
 
 // DELETE Example
-querySource.ClearConditions();
-querySource.AddConditions("Id = 2");
+tableSource.ClearConditions();
+tableSource.AddConditions("Id = 2");
 
-string deleteQuery = SqlQueryGenerator.Delete(querySource);
+string deleteQuery = SqlQueryGenerator.Delete(tableSource);
 int deleteResult = sqlExecutor.ExecuteNonQuery(deleteQuery);
 ~~~
 `OdeyTech.SqlProvider` provides a clean, efficient, and professional solution for working with SQL databases. The comprehensive nature of the library ensures it is well-suited for various projects.
