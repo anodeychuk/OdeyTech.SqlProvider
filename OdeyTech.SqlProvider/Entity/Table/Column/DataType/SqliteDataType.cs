@@ -68,6 +68,12 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
         case SqliteDataType.DataType.Blob:
           return DbDataTypeCategory.Binary;
 
+        case SqliteDataType.DataType.Date:
+          return DbDataTypeCategory.Date;
+
+        case SqliteDataType.DataType.DateTime:
+          return DbDataTypeCategory.DateTime;
+
         default:
           return DbDataTypeCategory.Other;
       }
