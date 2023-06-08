@@ -8,15 +8,15 @@
 
 namespace OdeyTech.SqlProvider.Entity.Database
 {
-  /// <summary>
-  /// Defines the configuration for a database.
-  /// </summary>
-  public interface IDatabaseConfig
-  {
     /// <summary>
-    /// Gets the connection string for the database.
+    /// Defines the configuration for a database.
     /// </summary>
-    /// <returns>The connection string.</returns>
-    string GetConnectionString();
-  }
+    public interface IDatabaseConfig
+    {
+        /// <summary>
+        /// Gets the connection string for the database.
+        /// </summary>
+        /// <returns>The connection string.</returns>
+        string GetConnectionString();
+    }
 }

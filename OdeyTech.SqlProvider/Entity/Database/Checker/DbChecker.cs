@@ -15,112 +15,112 @@ using OdeyTech.SqlProvider.Query;
 
 namespace OdeyTech.SqlProvider.Entity.Database.Checker
 {
-  /// <summary>
-  /// Represents a base class for checking the existence of a database and its items.
-  /// </summary>
-  public abstract class DbChecker : IDbChecker
-  {
-    /// <inheritdoc/>
-    public IDbConnection DbConnection { get; set; }
-
-    /// <inheritdoc/>
-    public SqlTable DatabaseItemSource { get; set; }
-
-    /// <inheritdoc/>
-    public SqlExecutor SqlExecutor { get; set; }
-
     /// <summary>
-    /// Checks the database and creates the database item if it does not exist.
+    /// Represents a base class for checking the existence of a database and its items.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown when the database does not exist.</exception>
-    public void CheckDatabase()
+    public abstract class DbChecker : IDbChecker
     {
-      if (!CheckDatabaseExists())
-      {
-        CreateDatabase();
-      }
+        /// <inheritdoc/>
+        public IDbConnection DbConnection { get; set; }
 
-      if (!CheckDatabaseItemExist())
-      {
-        CreateDatabaseItem();
-      }
-    }
+        /// <inheritdoc/>
+        public SqlTable DatabaseItemSource { get; set; }
 
-    /// <summary>
-    /// Checks if the database exists.
-    /// </summary>
-    /// <returns><c>true</c> if the database exists; otherwise, <c>false</c>.</returns>
-    protected bool CheckDatabaseExists()
-    {
-      if (!CheckDatabaseFileExists())
-      {
-        return false;
-      }
+        /// <inheritdoc/>
+        public SqlExecutor SqlExecutor { get; set; }
 
-      try
-      {
-        DbConnection.Open();
-        return true;
-      }
-      catch (SqlException)
-      {
-        return false;
-      }
-      finally
-      {
-        if (DbConnection.State != ConnectionState.Closed)
+        /// <summary>
+        /// Checks the database and creates the database item if it does not exist.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when the database does not exist.</exception>
+        public void CheckDatabase()
         {
-          DbConnection.Close();
+            if (!CheckDatabaseExists())
+            {
+                CreateDatabase();
+            }
+
+            if (!CheckDatabaseItemExist())
+            {
+                CreateDatabaseItem();
+            }
         }
-      }
-    }
 
-    /// <summary>
-    /// Checks if the database file exists.
-    /// </summary>
-    /// <returns><c>true</c> if the database file exists, otherwise, <c>false</c>.</returns>
-    protected virtual bool CheckDatabaseFileExists() => true;
-
-    /// <summary>
-    /// Creates the database.
-    /// </summary>
-    protected virtual void CreateDatabase() => throw new InvalidOperationException("Database does not exist.");
-
-    /// <summary>
-    /// Checks if the database item exists.
-    /// </summary>
-    /// <returns><c>true</c> if the database item exists; otherwise, <c>false</c>.</returns>
-    protected bool CheckDatabaseItemExist()
-    {
-      try
-      {
-        DbConnection.Open();
-        return CheckDatabaseItemExistInternal(DatabaseItemSource.GetName());
-      }
-      catch (SqlException)
-      {
-        return false;
-      }
-      finally
-      {
-        if (DbConnection.State != ConnectionState.Closed)
+        /// <summary>
+        /// Checks if the database exists.
+        /// </summary>
+        /// <returns><c>true</c> if the database exists; otherwise, <c>false</c>.</returns>
+        protected bool CheckDatabaseExists()
         {
-          DbConnection.Close();
+            if (!CheckDatabaseFileExists())
+            {
+                return false;
+            }
+
+            try
+            {
+                DbConnection.Open();
+                return true;
+            }
+            catch (SqlException)
+            {
+                return false;
+            }
+            finally
+            {
+                if (DbConnection.State != ConnectionState.Closed)
+                {
+                    DbConnection.Close();
+                }
+            }
         }
-      }
-    }
 
-    /// <summary>
-    /// Checks if the database item exists internally.
-    /// </summary>
-    /// <param name="itemName">The name of the database item.</param>
-    /// <returns><c>true</c> if the database item exists; otherwise, <c>false</c>.</returns>
-    protected abstract bool CheckDatabaseItemExistInternal(string itemName);
+        /// <summary>
+        /// Checks if the database file exists.
+        /// </summary>
+        /// <returns><c>true</c> if the database file exists, otherwise, <c>false</c>.</returns>
+        protected virtual bool CheckDatabaseFileExists() => true;
 
-    private void CreateDatabaseItem()
-    {
-      var query = SqlQueryGenerator.Create(DatabaseItemSource);
-      SqlExecutor.Query(query);
+        /// <summary>
+        /// Creates the database.
+        /// </summary>
+        protected virtual void CreateDatabase() => throw new InvalidOperationException("Database does not exist.");
+
+        /// <summary>
+        /// Checks if the database item exists.
+        /// </summary>
+        /// <returns><c>true</c> if the database item exists; otherwise, <c>false</c>.</returns>
+        protected bool CheckDatabaseItemExist()
+        {
+            try
+            {
+                DbConnection.Open();
+                return CheckDatabaseItemExistInternal(DatabaseItemSource.GetName());
+            }
+            catch (SqlException)
+            {
+                return false;
+            }
+            finally
+            {
+                if (DbConnection.State != ConnectionState.Closed)
+                {
+                    DbConnection.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if the database item exists internally.
+        /// </summary>
+        /// <param name="itemName">The name of the database item.</param>
+        /// <returns><c>true</c> if the database item exists; otherwise, <c>false</c>.</returns>
+        protected abstract bool CheckDatabaseItemExistInternal(string itemName);
+
+        private void CreateDatabaseItem()
+        {
+            var query = SqlQueryGenerator.Create(DatabaseItemSource);
+            SqlExecutor.Query(query);
+        }
     }
-  }
 }

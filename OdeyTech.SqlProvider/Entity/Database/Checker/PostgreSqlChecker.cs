@@ -11,23 +11,23 @@ using System.Data;
 
 namespace OdeyTech.SqlProvider.Entity.Database.Checker
 {
-  /// <summary>
-  /// Represents a base class for checking the existence of a database and its items.
-  /// </summary>
-  public class PostgreSqlChecker : DbChecker
-  {
-    /// <inheritdoc/>
-    protected override bool CheckDatabaseItemExistInternal(string itemName)
+    /// <summary>
+    /// Represents a base class for checking the existence of a database and its items.
+    /// </summary>
+    public class PostgreSqlChecker : DbChecker
     {
-      using IDbCommand command = DbConnection.CreateCommand();
-      command.CommandText = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = @tableName";
-      IDbDataParameter parameter = command.CreateParameter();
-      parameter.ParameterName = "@tableName";
-      parameter.DbType = DbType.String;
-      parameter.Value = itemName;
-      command.Parameters.Add(parameter);
-      var count = Convert.ToInt32(command.ExecuteScalar());
-      return count > 0;
+        /// <inheritdoc/>
+        protected override bool CheckDatabaseItemExistInternal(string itemName)
+        {
+            using IDbCommand command = DbConnection.CreateCommand();
+            command.CommandText = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = @tableName";
+            IDbDataParameter parameter = command.CreateParameter();
+            parameter.ParameterName = "@tableName";
+            parameter.DbType = DbType.String;
+            parameter.Value = itemName;
+            command.Parameters.Add(parameter);
+            var count = Convert.ToInt32(command.ExecuteScalar());
+            return count > 0;
+        }
     }
-  }
 }

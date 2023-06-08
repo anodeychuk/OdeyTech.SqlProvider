@@ -8,24 +8,24 @@
 
 namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
-  /// <summary>
-  /// Represents a database data type.
-  /// </summary>
-  public interface IDbDataType
-  {
     /// <summary>
-    /// Gets the name of the data type.
+    /// Represents a database data type.
     /// </summary>
-    string TypeName { get; }
+    public interface IDbDataType
+    {
+        /// <summary>
+        /// Gets the name of the data type.
+        /// </summary>
+        string TypeName { get; }
 
-    /// <summary>
-    /// Gets or sets the size of the SQL column data type.
-    /// </summary>
-    string Size { get; }
+        /// <summary>
+        /// Gets or sets the size of the SQL column data type.
+        /// </summary>
+        string Size { get; }
 
-    /// <summary>
-    /// Gets the category of the data type.
-    /// </summary>
-    DbDataTypeCategory Category { get; }
-  }
+        /// <summary>
+        /// Gets the category of the data type.
+        /// </summary>
+        DbDataTypeCategory Category { get; }
+    }
 }

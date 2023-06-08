@@ -8,17 +8,17 @@
 
 namespace OdeyTech.SqlProvider.Entity.Table.Column.NameConverter
 {
-  /// <summary>
-  /// Represents a name converter that converts column names and aliases.
-  /// </summary>
-  public interface INameConverter
-  {
     /// <summary>
-    /// Converts a column name and its alias according to the implementation logic.
+    /// Represents a name converter that converts column names and aliases.
     /// </summary>
-    /// <param name="name">The original column name.</param>
-    /// <param name="alias">The column alias.</param>
-    /// <returns>The converted column name.</returns>
-    string ConvertName(string name, string alias);
-  }
+    public interface INameConverter
+    {
+        /// <summary>
+        /// Converts a column name and its alias according to the implementation logic.
+        /// </summary>
+        /// <param name="name">The original column name.</param>
+        /// <param name="alias">The column alias.</param>
+        /// <returns>The converted column name.</returns>
+        string ConvertName(string name, string alias);
+    }
 }

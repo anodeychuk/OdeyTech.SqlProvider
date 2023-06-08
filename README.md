@@ -5,8 +5,8 @@
 ## Features
 
 - **Strongly-typed Column and Table Definitions**: The library provides strongly-typed column and table definitions, which enhance maintainability and reduce errors in your code.
-- **Flexible Query Generation**: With `OdeyTech.SqlProvider`, you can easily build complex SQL queries using the `SqlQueryGenerator` utility. It supports various query types such as `CREATE TABLE`, `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, utilizing the `SqlQuerySource` object.
-    - **`SqlQueryGenerator`**: This powerful utility enables you to generate different types of SQL queries, leveraging the capabilities of the `SqlQuerySource` object.
+- **Flexible Query Generation**: With `OdeyTech.SqlProvider`, you can easily build complex SQL queries using the `SqlQueryGenerator` utility. It supports various query types such as `CREATE TABLE`, `SELECT`, `INSERT`, `UPDATE`, and `DELETE`, using the object `SqlTable`.
+    - **`SqlQueryGenerator`**: This powerful utility enables you to generate different types of SQL queries, leveraging the capabilities of the `SqlTable` object.
     - **`SqlTable`**: This class represents a SQL table in a database, providing a structured way to interact with and manipulate the table. It allows for the setting and retrieval of table names, prefix, and columns, as well as the adding and clearing of join, condition, and order by statements.
     - **`SqlColumns`**: This class represents the columns of a SQL table, providing a structured way to interact with and manipulate the columns.
 	- **`SqlColumn`**: This class represents a column in a SQL query. It provides a structured way to define and interact with a column, including its name, data type, alias, and converters for value and name.
@@ -27,11 +27,11 @@ IDatabaseConfig dbConfig = new YourDatabaseConfig();
 ISqlExecutor sqlExecutor = new SqlExecutor();
 sqlExecutor.SetDbConnection(new SqlConnection(dbConfig.GetConnectionString()));
 
-// Define a SqlQuerySource
+// Define a SqlTable
 SqlTable tableSource = new SqlTable();
 tableSource.SetName("Users");
 
-// Define columns for the SQL query source
+// Define columns for the SQL table
 tableSource.Columns.AddColumn("Id", new MySqlDataType(MySqlDataType.DataType.Int));
 tableSource.Columns.AddColumn("FirstName", new MySqlDataType(MySqlDataType.DataType.VarChar));
 tableSource.Columns.AddColumn("LastName", new MySqlDataType(MySqlDataType.DataType.VarChar));
@@ -84,11 +84,11 @@ To start using `OdeyTech.SqlProvider`, install it as a NuGet package in your C# 
 We welcome contributions to `OdeyTech.SqlProvider`! Feel free to submit pull requests or raise issues to help us improve the library.
 
 ## License
-`OdeyTech.SqlProvider` is released under the [MIT License][LICENSE]. See the LICENSE file for more information.
+`OdeyTech.SqlProvider` is released under the [Non-Commercial License][LICENSE]. See the LICENSE file for more information.
 
 ## Stay in Touch
 For more information, updates, and future releases, follow me on [LinkedIn][LIn] I'd be happy to connect and discuss any questions or ideas you might have.
 
 [//]: #
    [LIn]: <https://www.linkedin.com/in/anodeychuk/>
-   [LICENSE]: <https://github.com/anodeychuk/OdeyTech.ProductivityKit/blob/main/LICENSE>
+   [LICENSE]: <https://github.com/anodeychuk/OdeyTech.SqlProvider/blob/main/LICENSE>

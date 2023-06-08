@@ -7,7 +7,7 @@
     <Product>OdeyTech.SqlProvider</Product>
     <Copyright>Copyright © $(Company) 2023.</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AssemblyVersion>0.0.78</AssemblyVersion>
+    <AssemblyVersion>0.0.79</AssemblyVersion>
     <Authors>$(Company)</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Robust, user-friendly, and efficient C# library designed to simplify and optimize the formation and execution of SQL queries for most popular RDBMS (MySQL, SQL Server, PostgreSQL, Oracle, SQLite) in .NET applications.</Description>

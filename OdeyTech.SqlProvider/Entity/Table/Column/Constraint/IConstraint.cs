@@ -8,19 +8,19 @@
 
 namespace OdeyTech.SqlProvider.Entity.Table.Column.Constraint
 {
-  /// <summary>
-  /// Represents a database constraint.
-  /// </summary>
-  public interface IConstraint
-  {
     /// <summary>
-    /// Gets the type of the SQL constraint.
+    /// Represents a database constraint.
     /// </summary>
-    SqlConstraintType Type { get; }
+    public interface IConstraint
+    {
+        /// <summary>
+        /// Gets the type of the SQL constraint.
+        /// </summary>
+        SqlConstraintType Type { get; }
 
-    /// <summary>
-    /// Gets or sets the name of the constraint.
-    /// </summary>
-    string ConstraintName { get; set; }
-  }
+        /// <summary>
+        /// Gets or sets the name of the constraint.
+        /// </summary>
+        string ConstraintName { get; set; }
+    }
 }

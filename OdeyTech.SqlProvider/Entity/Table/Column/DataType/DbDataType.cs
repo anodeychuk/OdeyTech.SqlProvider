@@ -10,21 +10,21 @@ using OdeyTech.ProductivityKit.Extension;
 
 namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
 {
-  /// <summary>
-  /// Represents a database data type.
-  /// </summary>
-  public abstract class DbDataType : IDbDataType
-  {
-    /// <inheritdoc/>
-    public string TypeName { get; protected set; }
+    /// <summary>
+    /// Represents a database data type.
+    /// </summary>
+    public abstract class DbDataType : IDbDataType
+    {
+        /// <inheritdoc/>
+        public string TypeName { get; protected set; }
 
-    /// <inheritdoc/>
-    public DbDataTypeCategory Category { get; protected set; }
+        /// <inheritdoc/>
+        public DbDataTypeCategory Category { get; protected set; }
 
-    /// <inheritdoc/>
-    public string Size { get; protected set; }
+        /// <inheritdoc/>
+        public string Size { get; protected set; }
 
-    /// <inheritdoc/>
-    public override string ToString() => Size.IsNullOrEmpty() ? TypeName : $"{TypeName} ({Size})";
-  }
+        /// <inheritdoc/>
+        public override string ToString() => Size.IsNullOrEmpty() ? TypeName : $"{TypeName} ({Size})";
+    }
 }
