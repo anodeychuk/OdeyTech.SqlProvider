@@ -24,6 +24,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// Gets the value of the column as a string.
         /// </summary>
         /// <returns>The string representation of the column value.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when DataType is null.</exception>
         public string GetValue()
         {
             CheckDataType();
@@ -34,6 +35,8 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// Sets the value of the column.
         /// </summary>
         /// <param name="value">The value to set for the column.</param>
+        /// <exception cref="FormatException">Thrown when value does not match the sql data type.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when DataType is null.</exception>
         public void SetValue(object value)
         {
             CheckDataType();
@@ -56,7 +59,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
 
         private void CheckDataType()
         {
-            if (DataType == null)
+            if (DataType is null)
             {
                 throw new InvalidOperationException("DataType cannot be null.");
             }
@@ -64,7 +67,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
 
         private object SanitizeSqlValue(object value, DbDataTypeCategory dataTypeCategory)
         {
-            if (value == null)
+            if (value is null)
             {
                 return value;
             }

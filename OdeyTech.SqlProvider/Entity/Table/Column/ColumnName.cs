@@ -41,7 +41,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// <returns>The name of the column.</returns>
         public string GetName(SqlQueryType sqlQueryType)
         {
-            if (this.converter == null)
+            if (this.converter is null)
             {
                 return this.name;
             }

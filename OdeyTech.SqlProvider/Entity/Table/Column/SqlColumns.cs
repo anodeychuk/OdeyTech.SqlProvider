@@ -38,19 +38,25 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// </summary>
         public int Count => this.columnsSource.Count;
 
+        private IEnumerable<KeyValuePair<string, SqlColumn>> ActiveColumns => this.columnsSource.Where(c => !c.Value.IsExcluded);
+
         /// <summary>
-        /// Adds a column to the <see cref="SqlColumns"/> using the specified column name, data type, and value converter.
+        /// Adds a new column to the <see cref="SqlColumns"/> instance using the specified parameters.
         /// </summary>
-        /// <param name="columnName">The name of the column to add.</param>
-        /// <param name="dataType">The data type of the column.</param>
-        /// <param name="valueConverter">The value converter for the column. (Optional)</param>
+        /// <param name="columnName">The name of the column to be added. This should be unique within the <see cref="SqlColumns"/> instance.</param>
+        /// <param name="dataType">The data type of the column to be added. This defines the type of data the column can hold.</param>
+        /// <param name="valueConverter">An optional parameter that specifies the value converter for the column. This is used to convert the column's value to a specific format or data type.</param>
+        /// <exception cref="ArgumentException">Thrown when a column with the same name already exists in the <see cref="SqlColumns"/> instance.</exception>
+
         public void AddColumn(string columnName, IDbDataType dataType, IDbValueConverter valueConverter = null)
             => AddColumn(new SqlColumn(columnName, dataType, null, valueConverter));
 
         /// <summary>
-        /// Adds a column to the <see cref="SqlColumns"/>.
+        /// Adds a new <see cref="SqlColumn"/> to the <see cref="SqlColumns"/> instance.
         /// </summary>
-        /// <param name="column">The column to add.</param>
+        /// <param name="column">The <see cref="SqlColumn"/> to be added. This should be a valid instance of <see cref="SqlColumn"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the provided <see cref="SqlColumn"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when a column with the same name already exists in the <see cref="SqlColumns"/> instance.</exception>
         public void AddColumn(SqlColumn column)
         {
             if (column == null)
@@ -67,20 +73,22 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         }
 
         /// <summary>
-        /// Gets a column by its name.
+        /// Retrieves a <see cref="SqlColumn"/> from the <see cref="SqlColumns"/> instance by its name.
         /// </summary>
-        /// <param name="columnName">The name of the column.</param>
-        /// <returns>The <see cref="SqlColumn"/> object.</returns>
+        /// <param name="columnName">The name of the column to retrieve.</param>
+        /// <returns>The <see cref="SqlColumn"/> with the specified name.</returns>
+        /// <exception cref="ArgumentException">Thrown when no column with the specified name exists in the <see cref="SqlColumns"/> instance.</exception>
         public SqlColumn GetColumn(string columnName)
             => this.columnsSource.TryGetValue(columnName, out SqlColumn column)
                 ? column
                 : throw new ArgumentException($"No column with the name {columnName} exists.");
 
         /// <summary>
-        /// Sets the value of a column.
+        /// Sets the value of a specific column in the <see cref="SqlColumns"/> instance.
         /// </summary>
-        /// <param name="columnName">The name of the column.</param>
-        /// <param name="value">The value to set for the column.</param>
+        /// <param name="columnName">The name of the column for which the value is to be set.</param>
+        /// <param name="value">The value to be set for the specified column.</param>
+        /// <exception cref="ArgumentException">Thrown when no column with the specified name exists in the <see cref="SqlColumns"/> instance.</exception>
         public void SetValue(string columnName, object value)
         {
             if (!this.columnsSource.ContainsKey(columnName))
@@ -95,14 +103,14 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// Gets the column names and their values in the format "columnName1 = value1, columnName2 = value2, ...".
         /// </summary>
         /// <returns>A string representation of the column names and their values.</returns>
-        public string GetColumnsValue() => string.Join(", ", GetActiveColumns().Select(p => $"{p.Value.GetName(SqlQueryType.Update)} = {p.Value.GetValue()}"));
+        public string GetColumnsValue() => string.Join(", ", ActiveColumns.Select(p => $"{p.Value.GetName(SqlQueryType.Update)} = {p.Value.GetValue()}"));
 
         /// <summary>
         /// Gets the names of the columns, separated by commas.
         /// </summary>
         /// <param name="sqlQueryType">The type of the SQL query.</param>
         /// <returns>A string representation of the column names.</returns>
-        public string GetColumnsName(SqlQueryType sqlQueryType) => string.Join(", ", GetActiveColumns().Select(p => p.Value.GetName(sqlQueryType)));
+        public string GetColumnsName(SqlQueryType sqlQueryType) => string.Join(", ", ActiveColumns.Select(p => p.Value.GetName(sqlQueryType)));
 
         /// <summary>
         /// Gets the column names and their data types for a create query.
@@ -146,7 +154,5 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
                 this.constraints.AddRange(constraints);
             }
         }
-
-        private IEnumerable<KeyValuePair<string, SqlColumn>> GetActiveColumns() => this.columnsSource.Where(c => !c.Value.IsExcluded);
     }
 }

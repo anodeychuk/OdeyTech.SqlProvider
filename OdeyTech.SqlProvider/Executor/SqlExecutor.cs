@@ -6,11 +6,11 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
 using OdeyTech.ProductivityKit.Extension;
 
 namespace OdeyTech.SqlProvider.Executor
@@ -31,17 +31,20 @@ namespace OdeyTech.SqlProvider.Executor
         /// Initializes a new instance of the <see cref="SqlExecutor"/> class with the specified database connection.
         /// </summary>
         /// <param name="connection">The <see cref="IDbConnection"/> object representing the database connection.</param>
+        /// <exception cref="ArgumentException">Thrown when connection is null.</exception>
         public SqlExecutor(IDbConnection connection)
         {
-            this.connection = connection;
+            this.connection = connection ?? throw new ArgumentException("Connection cannot be null.");
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentException">Thrown when query is null or empty.</exception>
+        /// <exception cref="SqlExecutorException">Thrown when an exception occurs during query execution.</exception>
         public void Query(string query, params DbParameter[] parameters)
         {
             if (string.IsNullOrEmpty(query))
             {
-                return;
+                throw new ArgumentException("Query cannot be null.");
             }
 
             OpenConnection();
@@ -69,11 +72,13 @@ namespace OdeyTech.SqlProvider.Executor
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentException">Thrown when queries is null.</exception>
+        /// <exception cref="SqlExecutorException">Thrown when an exception occurs during query execution.</exception>
         public void Query(IEnumerable<string> queries, params DbParameter[] parameters)
         {
-            if (queries == null || !queries.Any())
+            if (queries.IsNullOrEmpty())
             {
-                return;
+                throw new ArgumentException("Queries cannot be null or have no elements.");
             }
 
             OpenConnection();
@@ -95,7 +100,7 @@ namespace OdeyTech.SqlProvider.Executor
             catch (SqlException ex)
             {
                 transaction.Rollback();
-                throw new SqlExecutorException($"Exception while execute Query: {ex.Message}", ex);
+                throw new SqlExecutorException($"Exception while execute query: {ex.Message}", ex);
             }
             finally
             {
@@ -104,8 +109,15 @@ namespace OdeyTech.SqlProvider.Executor
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentException">Thrown when select-query is null or empty.</exception>
+        /// <exception cref="SqlExecutorException">Thrown when an exception occurs during query execution.</exception>
         public DataTable Select(string query, params DbParameter[] parameters)
         {
+            if (string.IsNullOrEmpty(query))
+            {
+                throw new ArgumentException("Query cannot be null.");
+            }
+
             var dataTable = new DataTable();
             OpenConnection();
 
@@ -131,8 +143,15 @@ namespace OdeyTech.SqlProvider.Executor
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentException">Thrown when store procedure name is null or empty.</exception>
+        /// <exception cref="SqlExecutorException">Thrown when an exception occurs during store procedure execution.</exception>
         public List<DbParameter> StoreProcedure(string storeProcedureName, params DbParameter[] parameters)
         {
+            if (string.IsNullOrEmpty(storeProcedureName))
+            {
+                throw new ArgumentException("Store procedure name cannot be null.");
+            }
+
             List<DbParameter> outputParameters = new();
             OpenConnection();
 
@@ -165,8 +184,15 @@ namespace OdeyTech.SqlProvider.Executor
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentException">Thrown when store function name is null or empty.</exception>
+        /// <exception cref="SqlExecutorException">Thrown when an exception occurs during store function execution.</exception>
         public object StoreFunction(string storeFunctionName, params DbParameter[] parameters)
         {
+            if (string.IsNullOrEmpty(storeFunctionName))
+            {
+                throw new ArgumentException("Store function name cannot be null.");
+            }
+
             object result = null;
 
             try
@@ -200,8 +226,9 @@ namespace OdeyTech.SqlProvider.Executor
         }
 
         /// <summary>
-        /// Opens a connection to the database.
+        /// Opens a connection to the database. This is a necessary step before executing any SQL commands.
         /// </summary>
+        /// <exception cref="SqlExecutorException">Thrown when an exception occurs while trying to open the connection to the database.</exception>
         private void OpenConnection()
         {
             try
@@ -215,8 +242,9 @@ namespace OdeyTech.SqlProvider.Executor
         }
 
         /// <summary>
-        /// Closes the connection to the database.
+        /// Closes the connection to the database. This should be done after all necessary SQL commands have been executed.
         /// </summary>
+        /// <exception cref="SqlExecutorException">Thrown when an exception occurs while trying to close the connection to the database.</exception>
         private void CloseConnection()
         {
             try

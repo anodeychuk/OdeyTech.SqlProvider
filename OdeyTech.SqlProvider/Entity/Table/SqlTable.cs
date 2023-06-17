@@ -35,8 +35,14 @@ namespace OdeyTech.SqlProvider.Entity.Table
         /// </summary>
         /// <param name="tableName">The name of the table.</param>
         /// <param name="tablePrefix">The prefix of the table.</param>
+        /// <exception cref="ArgumentException">Thrown when table name is null.</exception>
         public void SetName(string tableName, string tablePrefix = null)
         {
+            if (tableName.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException("The table name cannot be null");
+            }
+
             this.tableName = tableName;
             this.tablePrefix = tablePrefix;
         }
@@ -63,7 +69,6 @@ namespace OdeyTech.SqlProvider.Entity.Table
         /// <param name="joins">The join statements to add.</param>
         public void AddJoins(params string[] joins)
         {
-
             if (this.joins.IsNullOrEmpty())
             {
                 this.joins = new List<string>(joins);
@@ -147,9 +152,10 @@ namespace OdeyTech.SqlProvider.Entity.Table
         /// Validates the SQL table for a specific SQL query type.
         /// </summary>
         /// <param name="sqlType">The type of the SQL query.</param>
+        /// <exception cref="ArgumentException">Thrown when table_name is null or columns is null or number of columns is 0.</exception>
         public void Validate(SqlQueryType sqlType)
         {
-            Check(() => string.IsNullOrEmpty(this.tableName), nameof(this.tableName));
+            Check(() => this.tableName.IsNullOrEmpty(), nameof(this.tableName));
             if (sqlType is SqlQueryType.Insert or SqlQueryType.Update)
             {
                 Check(() => Columns == null || Columns.Count == 0, nameof(Columns));
