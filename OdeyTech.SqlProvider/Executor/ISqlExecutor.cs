@@ -6,7 +6,6 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -16,8 +15,13 @@ namespace OdeyTech.SqlProvider.Executor
     /// <summary>
     /// Represents an SQL query executor.
     /// </summary>
-    public interface ISqlExecutor : IDisposable
+    public interface ISqlExecutor
     {
+        /// <summary>
+        /// Gets the database connection.
+        /// </summary>
+        IDbConnection Connection { get; }
+
         /// <summary>
         /// Executes multiple SQL queries that are insert, update, or delete statements.
         /// </summary>

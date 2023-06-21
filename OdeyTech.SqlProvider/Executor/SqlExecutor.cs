@@ -20,13 +20,6 @@ namespace OdeyTech.SqlProvider.Executor
     /// </summary>
     public class SqlExecutor : ISqlExecutor
     {
-        private readonly IDbConnection connection;
-
-        /// <summary>
-        /// Disposes the database connection when this object is no longer needed.
-        /// </summary>
-        public void Dispose() => this.connection.Dispose();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlExecutor"/> class with the specified database connection.
         /// </summary>
@@ -34,8 +27,11 @@ namespace OdeyTech.SqlProvider.Executor
         /// <exception cref="ArgumentException">Thrown when connection is null.</exception>
         public SqlExecutor(IDbConnection connection)
         {
-            this.connection = connection ?? throw new ArgumentException("Connection cannot be null.");
+            Connection = connection ?? throw new ArgumentException("Connection cannot be null.");
         }
+
+        /// <inheritdoc/>
+        public IDbConnection Connection { get; }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">Thrown when query is null or empty.</exception>
@@ -49,8 +45,8 @@ namespace OdeyTech.SqlProvider.Executor
 
             OpenConnection();
 
-            using IDbCommand command = this.connection.CreateCommand();
-            using IDbTransaction transaction = this.connection.BeginTransaction();
+            using IDbCommand command = this.Connection.CreateCommand();
+            using IDbTransaction transaction = this.Connection.BeginTransaction();
             command.Transaction = transaction;
             command.CommandText = query;
             AddParameters(command.Parameters, parameters);
@@ -82,13 +78,13 @@ namespace OdeyTech.SqlProvider.Executor
             }
 
             OpenConnection();
-            using IDbTransaction transaction = this.connection.BeginTransaction();
+            using IDbTransaction transaction = this.Connection.BeginTransaction();
 
             try
             {
                 foreach (var query in queries)
                 {
-                    using IDbCommand command = this.connection.CreateCommand();
+                    using IDbCommand command = this.Connection.CreateCommand();
                     command.Transaction = transaction;
                     command.CommandText = query;
                     AddParameters(command.Parameters, parameters);
@@ -123,7 +119,7 @@ namespace OdeyTech.SqlProvider.Executor
 
             try
             {
-                using IDbCommand command = this.connection.CreateCommand();
+                using IDbCommand command = this.Connection.CreateCommand();
                 command.CommandText = query;
                 AddParameters(command.Parameters, parameters);
 
@@ -157,7 +153,7 @@ namespace OdeyTech.SqlProvider.Executor
 
             try
             {
-                using IDbCommand command = this.connection.CreateCommand();
+                using IDbCommand command = this.Connection.CreateCommand();
                 command.CommandText = storeProcedureName;
                 command.CommandType = CommandType.StoredProcedure;
                 AddParameters(command.Parameters, parameters);
@@ -198,7 +194,7 @@ namespace OdeyTech.SqlProvider.Executor
             try
             {
                 OpenConnection();
-                using IDbCommand command = this.connection.CreateCommand();
+                using IDbCommand command = this.Connection.CreateCommand();
                 command.CommandText = storeFunctionName;
                 command.CommandType = CommandType.StoredProcedure;
                 AddParameters(command.Parameters, parameters);
@@ -233,7 +229,7 @@ namespace OdeyTech.SqlProvider.Executor
         {
             try
             {
-                this.connection.Open();
+                this.Connection.Open();
             }
             catch (DbException ex)
             {
@@ -249,7 +245,7 @@ namespace OdeyTech.SqlProvider.Executor
         {
             try
             {
-                this.connection.Close();
+                this.Connection.Close();
             }
             catch (DbException ex)
             {
