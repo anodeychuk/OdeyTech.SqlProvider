@@ -18,16 +18,26 @@ namespace OdeyTech.SqlProvider.Entity.Database.Checker
     /// <summary>
     /// Represents a base class for checking the existence of a database and its items.
     /// </summary>
-    public abstract class DbChecker : IDbChecker
+    internal abstract class DbChecker : IDbChecker
     {
-        /// <inheritdoc/>
-        public IDbConnection DbConnection { get; set; }
+        protected readonly ISqlQueryGenerator sqlQueryGenerator;
+        private readonly SqlExecutor sqlExecutor;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbChecker"/> class with the specified database type and connection.
+        /// </summary>
+        /// <param name="databaseType">The type of the database to check.</param>
+        /// <param name="dbConnection">The connection to the database to check.</param>
+        public DbChecker(DatabaseType databaseType, IDbConnection dbConnection)
+        {
+            this.sqlQueryGenerator = QueryGenerationFactory.GetGenerator(databaseType);
+            this.sqlExecutor = new SqlExecutor(dbConnection);
+        }
+
+        protected IDbConnection DbConnection => this.sqlExecutor.Connection;
 
         /// <inheritdoc/>
         public SqlTable DatabaseItemSource { get; set; }
-
-        /// <inheritdoc/>
-        public SqlExecutor SqlExecutor { get; set; }
 
         /// <summary>
         /// Checks the database and creates the database item if it does not exist.
@@ -119,8 +129,8 @@ namespace OdeyTech.SqlProvider.Entity.Database.Checker
 
         private void CreateDatabaseItem()
         {
-            var query = SqlQueryGenerator.Create(DatabaseItemSource);
-            SqlExecutor.Query(query);
+            var query = this.sqlQueryGenerator.Create(DatabaseItemSource);
+            this.sqlExecutor.Query(query);
         }
     }
 }

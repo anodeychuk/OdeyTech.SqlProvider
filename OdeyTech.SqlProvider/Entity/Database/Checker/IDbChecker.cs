@@ -6,9 +6,7 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-using System.Data;
 using OdeyTech.SqlProvider.Entity.Table;
-using OdeyTech.SqlProvider.Executor;
 
 namespace OdeyTech.SqlProvider.Entity.Database.Checker
 {
@@ -18,19 +16,9 @@ namespace OdeyTech.SqlProvider.Entity.Database.Checker
     public interface IDbChecker
     {
         /// <summary>
-        /// Gets the database connection.
-        /// </summary>
-        IDbConnection DbConnection { get; set; }
-
-        /// <summary>
         /// Gets the SQL query source for the database item.
         /// </summary>
         SqlTable DatabaseItemSource { get; set; }
-
-        /// <summary>
-        /// Gets the SQL executor.
-        /// </summary>
-        SqlExecutor SqlExecutor { get; set; }
 
         /// <summary>
         /// Checks the database and creates the database item if it does not exist.

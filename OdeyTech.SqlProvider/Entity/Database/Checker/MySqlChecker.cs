@@ -14,8 +14,15 @@ namespace OdeyTech.SqlProvider.Entity.Database.Checker
     /// <summary>
     /// Represents a base class for checking the existence of a database and its items.
     /// </summary>
-    public class MySqlChecker : DbChecker
+    internal class MySqlChecker : DbChecker
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MySqlChecker"/> class with the specified database connection.
+        /// </summary>
+        /// <param name="dbConnection">The connection to the MySQL database to check.</param>
+        public MySqlChecker(IDbConnection dbConnection) : base(DatabaseType.MySql, dbConnection)
+        { }
+
         /// <inheritdoc/>
         protected override bool CheckDatabaseItemExistInternal(string itemName)
         {

@@ -15,8 +15,15 @@ namespace OdeyTech.SqlProvider.Entity.Database.Checker
     /// <summary>
     /// Represents a base class for checking the existence of a database and its items.
     /// </summary>
-    public class SQLiteChecker : DbChecker
+    internal class SQLiteChecker : DbChecker
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteChecker"/> class with the specified database connection.
+        /// </summary>
+        /// <param name="dbConnection">The connection to the SQLite database to check.</param>
+        public SQLiteChecker(IDbConnection dbConnection) : base(DatabaseType.SQLite, dbConnection)
+        { }
+
         /// <inheritdoc/>
         protected override bool CheckDatabaseFileExists()
         {
