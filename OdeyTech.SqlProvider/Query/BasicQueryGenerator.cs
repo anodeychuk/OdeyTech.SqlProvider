@@ -6,6 +6,8 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
+using System;
+using OdeyTech.ProductivityKit.Extension;
 using OdeyTech.SqlProvider.Entity.Table;
 using OdeyTech.SqlProvider.Enum;
 
@@ -41,14 +43,20 @@ namespace OdeyTech.SqlProvider.Query
         public string Update(SqlTable table)
         {
             table.Validate(SqlQueryType.Update);
-            return $"UPDATE {table.GetName()} SET {table.Columns.GetColumnsValue()}{table.GetConditions()};";
+            var conditions = table.GetConditions();
+            return conditions.IsNullOrEmpty()
+                ? throw new ArgumentException("The condition is not set")
+                : $"UPDATE {table.GetName()} SET {table.Columns.GetColumnsValue()}{table.GetConditions()};";
         }
 
         /// <inheritdoc/>
         public string Delete(SqlTable table)
         {
             table.Validate(SqlQueryType.Delete);
-            return $"DELETE FROM {table.GetName()}{table.GetConditions()};";
+            var conditions = table.GetConditions();
+            return conditions.IsNullOrEmpty()
+                ? throw new ArgumentException("The condition is not set")
+                : $"DELETE FROM {table.GetName()}{conditions};";
         }
     }
 }

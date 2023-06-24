@@ -25,6 +25,6 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
         public string Size { get; protected set; }
 
         /// <inheritdoc/>
-        public override string ToString() => Size.IsNullOrEmpty() ? TypeName : $"{TypeName} ({Size})";
+        public override string ToString() => Size.IsNullOrEmpty() ? TypeName : $"{TypeName}({Size})";
     }
 }

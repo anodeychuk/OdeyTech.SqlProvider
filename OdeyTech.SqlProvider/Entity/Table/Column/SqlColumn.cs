@@ -6,6 +6,7 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
+using System;
 using OdeyTech.SqlProvider.Entity.Table.Column.DataType;
 using OdeyTech.SqlProvider.Entity.Table.Column.NameConverter;
 using OdeyTech.SqlProvider.Entity.Table.Column.ValueConverter;
@@ -16,10 +17,10 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
     /// <summary>
     /// Represents a column in a SQL query.
     /// </summary>
-    public class SqlColumn
+    public class SqlColumn : ICloneable
     {
-        private readonly ColumnName name;
-        private readonly ColumnValue value;
+        private ColumnName name;
+        private ColumnValue value;
 
         /// <summary>
         /// Initializes a new instance of the SqlColumn class with the specified name, data type, alias, value converter, and name converter.
@@ -40,6 +41,11 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         }
 
         /// <summary>
+        /// Initializes a new instance of the SqlColumn class.
+        /// </summary>
+        private SqlColumn() { }
+
+        /// <summary>
         /// Gets the data type of the SQL column.
         /// </summary>
         public IDbDataType DataType => this.value.DataType;
@@ -48,6 +54,9 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// Gets or sets a value indicating whether the column is excluded.
         /// </summary>
         public bool IsExcluded { get; set; }
+
+        /// <inheritdoc/>
+        public object Clone() => new SqlColumn { name = (ColumnName)this.name.Clone(), value = (ColumnValue)this.value.Clone() };
 
         /// <summary>
         /// Gets the name of the column based on the specified SQL query type.

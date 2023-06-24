@@ -6,6 +6,7 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -15,3 +16,5 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("6cf023c7-e4f0-4d05-a0a6-ea72a86b1485")]
+
+[assembly: InternalsVisibleTo("OdeyTech.SqlProvider.Test")]

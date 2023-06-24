@@ -22,7 +22,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
     /// </summary>
     public class SqlColumns : ICloneable
     {
-        private Dictionary<string, SqlColumn> columnsSource;
+        private readonly Dictionary<string, SqlColumn> columnsSource;
         private List<IConstraint> constraints;
 
         /// <summary>
@@ -47,9 +47,8 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// <param name="dataType">The data type of the column to be added. This defines the type of data the column can hold.</param>
         /// <param name="valueConverter">An optional parameter that specifies the value converter for the column. This is used to convert the column's value to a specific format or data type.</param>
         /// <exception cref="ArgumentException">Thrown when a column with the same name already exists in the <see cref="SqlColumns"/> instance.</exception>
-
-        public void AddColumn(string columnName, IDbDataType dataType, IDbValueConverter valueConverter = null)
-            => AddColumn(new SqlColumn(columnName, dataType, null, valueConverter));
+        public void Add(string columnName, IDbDataType dataType, IDbValueConverter valueConverter = null)
+            => Add(new SqlColumn(columnName, dataType, null, valueConverter));
 
         /// <summary>
         /// Adds a new <see cref="SqlColumn"/> to the <see cref="SqlColumns"/> instance.
@@ -57,7 +56,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// <param name="column">The <see cref="SqlColumn"/> to be added. This should be a valid instance of <see cref="SqlColumn"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when the provided <see cref="SqlColumn"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown when a column with the same name already exists in the <see cref="SqlColumns"/> instance.</exception>
-        public void AddColumn(SqlColumn column)
+        public void Add(SqlColumn column)
         {
             if (column == null)
             {
@@ -78,7 +77,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// <param name="columnName">The name of the column to retrieve.</param>
         /// <returns>The <see cref="SqlColumn"/> with the specified name.</returns>
         /// <exception cref="ArgumentException">Thrown when no column with the specified name exists in the <see cref="SqlColumns"/> instance.</exception>
-        public SqlColumn GetColumn(string columnName)
+        public SqlColumn Get(string columnName)
             => this.columnsSource.TryGetValue(columnName, out SqlColumn column)
                 ? column
                 : throw new ArgumentException($"No column with the name {columnName} exists.");
@@ -100,39 +99,58 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         }
 
         /// <summary>
-        /// Gets the column names and their values in the format "columnName1 = value1, columnName2 = value2, ...".
+        /// Gets a string representation of the active columns and their values in the format "columnName1 = value1, columnName2 = value2, ...".
         /// </summary>
-        /// <returns>A string representation of the column names and their values.</returns>
-        public string GetColumnsValue() => string.Join(", ", ActiveColumns.Select(p => $"{p.Value.GetName(SqlQueryType.Update)} = {p.Value.GetValue()}"));
+        /// <returns>A string representation of the active column names and their values.</returns>
+        /// <exception cref="ArgumentException">Thrown when there are no active columns.</exception>
+        public string GetColumnsValue()
+        {
+            CheckNumberActiveColumns();
+            return string.Join(", ", ActiveColumns.Select(p => $"{p.Value.GetName(SqlQueryType.Update)} = {p.Value.GetValue()}"));
+        }
 
         /// <summary>
-        /// Gets the names of the columns, separated by commas.
+        /// Gets a string representation of the active column names, separated by commas.
         /// </summary>
-        /// <param name="sqlQueryType">The type of the SQL query.</param>
-        /// <returns>A string representation of the column names.</returns>
-        public string GetColumnsName(SqlQueryType sqlQueryType) => string.Join(", ", ActiveColumns.Select(p => p.Value.GetName(sqlQueryType)));
+        /// <param name="sqlQueryType">The type of the SQL query. This determines how the column names are formatted.</param>
+        /// <returns>A string representation of the active column names.</returns>
+        /// <exception cref="ArgumentException">Thrown when there are no active columns.</exception>
+        public string GetColumnsName(SqlQueryType sqlQueryType = SqlQueryType.Create)
+        {
+            CheckNumberActiveColumns();
+            return string.Join(", ", ActiveColumns.Select(p => p.Value.GetName(sqlQueryType)));
+        }
 
         /// <summary>
-        /// Gets the column names and their data types for a create query.
+        /// Gets a string representation of the column names and their data types, formatted for a CREATE TABLE query.
         /// </summary>
         /// <returns>A string representation of the column names and their data types.</returns>
+        /// <exception cref="ArgumentException">Thrown when there are no columns.</exception>
         public string GetColumnsDataType()
         {
-            var columns = string.Join(", ", this.columnsSource.Select(p => $"{p.Value.GetName()} {p.Value.DataType}"));
+            CheckNumberColumns();
+            var columns = string.Join(", ", this.columnsSource.Select(p => $"{p.Value.GetName()} {p.Value.DataType.ToString().ToUpper()}"));
             return this.constraints.IsNullOrEmpty() ? columns : $"{columns}, {string.Join(", ", this.constraints)}";
         }
 
         /// <summary>
-        /// Gets the values of the columns, separated by commas.
+        /// Gets a string representation of the column values, separated by commas.
         /// </summary>
         /// <returns>A string representation of the column values.</returns>
-        public string GetValues() => string.Join(", ", this.columnsSource.Select(p => p.Value.GetValue()));
+        /// <exception cref="ArgumentException">Thrown when there are no columns.</exception>
+        public string GetValues()
+        {
+            CheckNumberColumns();
+            return string.Join(", ", this.columnsSource.Select(p => p.Value.GetValue()));
+        }
 
-        /// <summary>
-        /// Creates a copy of this <see cref="SqlColumns"/> object.
-        /// </summary>
-        /// <returns>A new SqlColumns object with the same column values.</returns>
-        public object Clone() => new SqlColumns { columnsSource = new(this.columnsSource) };
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            var columns = new SqlColumns();
+            this.columnsSource.ForEach(c => columns.Add((SqlColumn)c.Value.Clone()));
+            return columns;
+        }
 
         /// <summary>
         /// Removes all columns and excluded columns.
@@ -152,6 +170,23 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
             else
             {
                 this.constraints.AddRange(constraints);
+            }
+        }
+
+        private void CheckNumberColumns()
+        {
+            if (this.columnsSource.Count == 0)
+            {
+                throw new ArgumentException("The number of columns is 0");
+            }
+        }
+
+        private void CheckNumberActiveColumns()
+        {
+            CheckNumberColumns();
+            if (this.ActiveColumns.Count() == 0)
+            {
+                throw new ArgumentException("The number of active columns is 0");
             }
         }
     }

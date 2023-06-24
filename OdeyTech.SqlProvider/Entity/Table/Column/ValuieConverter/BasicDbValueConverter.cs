@@ -23,8 +23,8 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.ValueConverter
                 : category switch
                 {
                     DbDataTypeCategory.String => $"'{value}'",
-                    DbDataTypeCategory.DateTime => $"'{(DateTime)value:yyyy-MM-dd HH:mm:ss}'",
-                    DbDataTypeCategory.Date => $"'{(DateTime)value:yyyy-MM-dd}'",
+                    DbDataTypeCategory.DateTime => value is DateTime date ? $"'{date:yyyy-MM-dd HH:mm:ss}'" : throw new ArgumentException("The value must be of type DateTime"),
+                    DbDataTypeCategory.Date => value is DateTime date ? $"'{date:yyyy-MM-dd}'" : throw new ArgumentException("The value must be of type DateTime"),
                     DbDataTypeCategory.Boolean => Convert.ToBoolean(value) ? "1" : "0",
                     _ => value.ToString(),
                 };

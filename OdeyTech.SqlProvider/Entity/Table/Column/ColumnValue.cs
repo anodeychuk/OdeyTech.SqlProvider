@@ -15,7 +15,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
     /// <summary>
     /// Represents the value of a column in a SQL query.
     /// </summary>
-    public class ColumnValue
+    public class ColumnValue : ICloneable
     {
         private object value;
         private IDbValueConverter converter;
@@ -57,11 +57,20 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
             set => this.converter = value;
         }
 
+        /// <inheritdoc/>
+        public object Clone()
+            => new ColumnValue()
+            {
+                DataType = DataType,
+                converter = this.converter,
+                value = this.value
+            };
+
         private void CheckDataType()
         {
             if (DataType is null)
             {
-                throw new InvalidOperationException("DataType cannot be null.");
+                throw new InvalidOperationException($"{nameof(DataType)} cannot be null.");
             }
         }
 
