@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using OdeyTech.ProductivityKit;
 using OdeyTech.ProductivityKit.Extension;
 
 namespace OdeyTech.SqlProvider.Executor
@@ -24,10 +25,11 @@ namespace OdeyTech.SqlProvider.Executor
         /// Initializes a new instance of the <see cref="SqlExecutor"/> class with the specified database connection.
         /// </summary>
         /// <param name="connection">The <see cref="IDbConnection"/> object representing the database connection.</param>
-        /// <exception cref="ArgumentException">Thrown when connection is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when connection is null.</exception>
         public SqlExecutor(IDbConnection connection)
         {
-            Connection = connection ?? throw new ArgumentException("Connection cannot be null.");
+            ThrowHelper.ThrowIfNull(connection, nameof(connection), "Connection cannot be null.");
+            Connection = connection;
         }
 
         /// <inheritdoc/>
@@ -38,10 +40,7 @@ namespace OdeyTech.SqlProvider.Executor
         /// <exception cref="SqlExecutorException">Thrown when an exception occurs during query execution.</exception>
         public void Query(string query, params DbParameter[] parameters)
         {
-            if (string.IsNullOrEmpty(query))
-            {
-                throw new ArgumentException("Query cannot be null.");
-            }
+            ThrowHelper.ThrowIfNullOrEmpty(query, nameof(query), "Query cannot be null.");
 
             OpenConnection();
 
@@ -72,10 +71,7 @@ namespace OdeyTech.SqlProvider.Executor
         /// <exception cref="SqlExecutorException">Thrown when an exception occurs during query execution.</exception>
         public void Query(IEnumerable<string> queries, params DbParameter[] parameters)
         {
-            if (queries.IsNullOrEmpty())
-            {
-                throw new ArgumentException("Queries cannot be null or have no elements.");
-            }
+            ThrowHelper.ThrowIfNullOrEmpty(queries, nameof(queries), "Queries cannot be null or have no elements.");
 
             OpenConnection();
             using IDbTransaction transaction = this.Connection.BeginTransaction();
@@ -109,10 +105,7 @@ namespace OdeyTech.SqlProvider.Executor
         /// <exception cref="SqlExecutorException">Thrown when an exception occurs during query execution.</exception>
         public DataTable Select(string query, params DbParameter[] parameters)
         {
-            if (string.IsNullOrEmpty(query))
-            {
-                throw new ArgumentException("Query cannot be null.");
-            }
+            ThrowHelper.ThrowIfNullOrEmpty(query, nameof(query), "Query cannot be null.");
 
             var dataTable = new DataTable();
             OpenConnection();
@@ -143,10 +136,7 @@ namespace OdeyTech.SqlProvider.Executor
         /// <exception cref="SqlExecutorException">Thrown when an exception occurs during store procedure execution.</exception>
         public List<DbParameter> StoreProcedure(string storeProcedureName, params DbParameter[] parameters)
         {
-            if (string.IsNullOrEmpty(storeProcedureName))
-            {
-                throw new ArgumentException("Store procedure name cannot be null.");
-            }
+            ThrowHelper.ThrowIfNullOrEmpty(storeProcedureName, nameof(storeProcedureName), "Store procedure name cannot be null.");
 
             List<DbParameter> outputParameters = new();
             OpenConnection();
@@ -184,10 +174,7 @@ namespace OdeyTech.SqlProvider.Executor
         /// <exception cref="SqlExecutorException">Thrown when an exception occurs during store function execution.</exception>
         public object StoreFunction(string storeFunctionName, params DbParameter[] parameters)
         {
-            if (string.IsNullOrEmpty(storeFunctionName))
-            {
-                throw new ArgumentException("Store function name cannot be null.");
-            }
+            ThrowHelper.ThrowIfNullOrEmpty(storeFunctionName, nameof(storeFunctionName), "Store function name cannot be null.");
 
             object result = null;
 

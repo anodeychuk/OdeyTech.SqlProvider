@@ -2,17 +2,18 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <LangVersion>9.0</LangVersion>
+    <Product>OdeyTech.SqlProvider</Product>
     <AssemblyTitle>OdeyTech.SqlProvider</AssemblyTitle>
     <Company>Andrii Odeychuk</Company>
-    <Product>OdeyTech.SqlProvider</Product>
+    <Authors>$(Company)</Authors>
     <Copyright>Copyright © $(Company) 2023.</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AssemblyVersion>0.0.123</AssemblyVersion>
-    <Authors>$(Company)</Authors>
+    <AssemblyVersion>0.0.129</AssemblyVersion>
+    <Version>$(AssemblyVersion)</Version>	
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Robust, user-friendly, and efficient C# library designed to simplify and optimize the formation and execution of SQL queries for most popular RDBMS (MySQL, SQL Server, PostgreSQL, Oracle, SQLite) in .NET applications.</Description>
     <RepositoryUrl>https://github.com/anodeychuk/OdeyTech.SqlProvider</RepositoryUrl>
-    <Version>$(AssemblyVersion)</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>SQL query, Query generation, Database, Database management, SQL development</PackageTags>
@@ -35,7 +36,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OdeyTech.ProductivityKit" Version="0.0.27" />
+    <PackageReference Include="OdeyTech.ProductivityKit" Version="0.0.39" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data.DataSetExtensions" />

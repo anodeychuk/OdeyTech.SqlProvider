@@ -13,7 +13,6 @@ using OdeyTech.SqlProvider.Entity.Table.Column;
 using OdeyTech.SqlProvider.Entity.Table.Column.Constraint;
 using OdeyTech.SqlProvider.Entity.Table.Column.DataType;
 using OdeyTech.SqlProvider.Entity.Table.Column.ValueConverter;
-using OdeyTech.SqlProvider.Enum;
 
 namespace OdeyTech.SqlProvider.Test.Entity.Table.Column
 {

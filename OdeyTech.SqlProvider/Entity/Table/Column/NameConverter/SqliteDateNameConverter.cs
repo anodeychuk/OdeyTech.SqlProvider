@@ -6,6 +6,8 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
+using System;
+using OdeyTech.ProductivityKit;
 using OdeyTech.ProductivityKit.Extension;
 
 namespace OdeyTech.SqlProvider.Entity.Table.Column.NameConverter
@@ -16,7 +18,11 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.NameConverter
     public class SQLiteDateNameConverter : INameConverter
     {
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown when the name is null or empty.</exception>
         public string ConvertName(string name, string alias)
-            => $"date({name}, 'unixepoch') AS {(alias.IsNullOrEmpty() ? name : alias)}";
+        {
+            ThrowHelper.ThrowIfNullOrEmpty(name, nameof(name));
+            return $"date({name}, 'unixepoch') AS {(alias.IsNullOrEmpty() ? name : alias)}";
+        }
     }
 }

@@ -52,17 +52,9 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
         /// </summary>
         /// <param name="type">The MySQL data type.</param>
         /// <param name="size">The size of the MySQL data type.</param>
-        public MySqlDataType(MySqlDataType.DataType type, string size) : this(type)
+        public MySqlDataType(MySqlDataType.DataType type, string size = null)
         {
             Size = size;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MySqlDataType"/> class with the specified type.
-        /// </summary>
-        /// <param name="type">The MySQL data type.</param>
-        public MySqlDataType(MySqlDataType.DataType type)
-        {
             TypeName = type.ToString();
             Category = GetTypeCategory(type);
         }

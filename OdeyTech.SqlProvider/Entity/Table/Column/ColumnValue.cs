@@ -7,6 +7,7 @@
 // --------------------------------------------------------------------------
 
 using System;
+using OdeyTech.ProductivityKit;
 using OdeyTech.SqlProvider.Entity.Table.Column.DataType;
 using OdeyTech.SqlProvider.Entity.Table.Column.ValueConverter;
 

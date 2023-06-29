@@ -7,6 +7,7 @@
 // --------------------------------------------------------------------------
 
 using System;
+using OdeyTech.ProductivityKit;
 using OdeyTech.ProductivityKit.Extension;
 
 namespace OdeyTech.SqlProvider.Entity.Table.Column.NameConverter
@@ -25,11 +26,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.NameConverter
         /// <exception cref="ArgumentNullException">Thrown when the name parameter is null or empty.</exception>
         public string ConvertName(string name, string alias)
         {
-            if (name.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException("name");
-            }
-
+            ThrowHelper.ThrowIfNullOrEmpty(name, nameof(name));
             return alias.IsNullOrEmpty()
                 ? name
                 : $"{name} AS {alias}";

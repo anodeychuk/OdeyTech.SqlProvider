@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OdeyTech.ProductivityKit;
 using OdeyTech.ProductivityKit.Extension;
 using OdeyTech.SqlProvider.Entity.Table.Column.Constraint;
 using OdeyTech.SqlProvider.Entity.Table.Column.DataType;
@@ -58,10 +59,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// <exception cref="ArgumentException">Thrown when a column with the same name already exists in the <see cref="SqlColumns"/> instance.</exception>
         public void Add(SqlColumn column)
         {
-            if (column == null)
-            {
-                throw new ArgumentNullException(nameof(column));
-            }
+            ThrowHelper.ThrowIfNull(column, nameof(column));
 
             if (this.columnsSource.ContainsKey(column.GetName()))
             {

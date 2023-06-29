@@ -7,6 +7,7 @@
 // --------------------------------------------------------------------------
 
 using System;
+using OdeyTech.ProductivityKit;
 using OdeyTech.SqlProvider.Entity.Table.Column.NameConverter;
 using OdeyTech.SqlProvider.Enum;
 
@@ -27,10 +28,11 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column
         /// <param name="name">The name of the column. This parameter cannot be null.</param>
         /// <param name="alias">The alias for the column. This parameter can be null, in which case the column will not be aliased.</param>
         /// <param name="converter">The name converter for the column. This parameter can be null, in which case a <see cref="BasicNameConverter"/> will be used.</param>
-        /// <exception cref="ArgumentException">Thrown when the name parameter is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when the name parameter is null.</exception>
         public ColumnName(string name, string alias, INameConverter converter)
         {
-            this.name = name ?? throw new ArgumentException(nameof(name));
+            ThrowHelper.ThrowIfNull(name, nameof(name));
+            this.name = name;
             this.alias = alias;
             this.converter = converter ?? new BasicNameConverter();
         }

@@ -47,17 +47,9 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
         /// </summary>
         /// <param name="type">The Oracle data type.</param>
         /// <param name="size">The size of the Oracle data type.</param>
-        public OracleDataType(OracleDataType.DataType type, string size) : this(type)
+        public OracleDataType(OracleDataType.DataType type, string size = null)
         {
             Size = size;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OracleDataType"/> class with the specified type.
-        /// </summary>
-        /// <param name="type">The Oracle data type.</param>
-        public OracleDataType(OracleDataType.DataType type)
-        {
             TypeName = type.ToString();
             Category = GetTypeCategory(type);
         }

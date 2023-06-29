@@ -46,20 +46,14 @@ namespace OdeyTech.SqlProvider.Test.Entity.Table.Column
         [TestMethod]
         public void SetValue_ThrowsException_WhenDataTypeIsNull()
         {
-            var columnValue = new ColumnValue
-            {
-                ValueConverter = new SQLiteValueConverter()
-            };
+            var columnValue = new ColumnValue { ValueConverter = new SQLiteValueConverter() };
             Assert.ThrowsException<InvalidOperationException>(() => columnValue.SetValue("test"));
         }
 
         [TestMethod]
         public void GetValue_ThrowsException_WhenDataTypeIsNull()
         {
-            var columnValue = new ColumnValue
-            {
-                ValueConverter = new SQLiteValueConverter()
-            };
+            var columnValue = new ColumnValue { ValueConverter = new SQLiteValueConverter() };
             Assert.ThrowsException<InvalidOperationException>(() => columnValue.GetValue());
         }
     }

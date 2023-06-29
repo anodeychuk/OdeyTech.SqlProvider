@@ -6,11 +6,11 @@
 // </copyright>
 // --------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using OdeyTech.ProductivityKit;
 
 namespace OdeyTech.SqlProvider.Test.Executor
 {
@@ -22,9 +22,8 @@ namespace OdeyTech.SqlProvider.Test.Executor
             set
             {
                 DbParameter param = this.FirstOrDefault(p => p.ParameterName == parameterName);
-                param.Value = param != null
-                    ? value
-                    : throw new IndexOutOfRangeException($"Parameter '{parameterName}' not found.");
+                ThrowHelper.ThrowIfNull(param, nameof(param), $"Parameter '{parameterName}' not found.");
+                param.Value = value;
             }
         }
 
@@ -35,14 +34,8 @@ namespace OdeyTech.SqlProvider.Test.Executor
         public void RemoveAt(string parameterName)
         {
             DbParameter param = this.FirstOrDefault(p => p.ParameterName == parameterName);
-            if (param != null)
-            {
-                this.Remove(param);
-            }
-            else
-            {
-                throw new IndexOutOfRangeException($"Parameter '{parameterName}' not found.");
-            }
+            ThrowHelper.ThrowIfNull(param, nameof(param), $"Parameter '{parameterName}' not found.");
+            this.Remove(param);
         }
     }
 }

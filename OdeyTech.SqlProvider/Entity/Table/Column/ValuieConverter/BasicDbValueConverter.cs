@@ -17,6 +17,7 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.ValueConverter
     public class BasicDbValueConverter : IDbValueConverter
     {
         /// <inheritdoc/>
+        /// <exception cref="ArgumentException">Thrown when the value is not of the expected type for the specified category.</exception>
         public string ConvertToDbValue(object value, DbDataTypeCategory category)
             => value == null
                 ? "NULL"

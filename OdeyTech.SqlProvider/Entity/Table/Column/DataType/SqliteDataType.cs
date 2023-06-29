@@ -32,17 +32,9 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
         /// </summary>
         /// <param name="type">The SQLite data type.</param>
         /// <param name="size">The size of the SQLite data type.</param>
-        public SQLiteDataType(SQLiteDataType.DataType type, string size) : this(type)
+        public SQLiteDataType(SQLiteDataType.DataType type, string size = null)
         {
             Size = size;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SQLiteDataType"/> class with the specified type.
-        /// </summary>
-        /// <param name="type">The SQLite data type.</param>
-        public SQLiteDataType(SQLiteDataType.DataType type)
-        {
             TypeName = GetTypeName(type);
             Category = GetTypeCategory(type);
         }

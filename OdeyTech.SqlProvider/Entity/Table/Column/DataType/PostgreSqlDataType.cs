@@ -64,17 +64,9 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
         /// </summary>
         /// <param name="type">The PostgreSQL data type.</param>
         /// <param name="size">The size of the PostgreSQL data type.</param>
-        public PostgreSqlDataType(PostgreSqlDataType.DataType type, string size) : this(type)
+        public PostgreSqlDataType(PostgreSqlDataType.DataType type, string size = null)
         {
             Size = size;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PostgreSqlDataType"/> class with the specified type.
-        /// </summary>
-        /// <param name="type">The PostgreSQL data type.</param>
-        public PostgreSqlDataType(PostgreSqlDataType.DataType type)
-        {
             TypeName = type.ToString();
             Category = GetTypeCategory(type);
         }

@@ -79,9 +79,7 @@ namespace OdeyTech.SqlProvider.Test.Entity.Table.Column.ValueConverter
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ConvertToDbValue_InvalidType_ThrowsException()
-        {
-            this.converter.ConvertToDbValue("2023-06-21", DbDataTypeCategory.Date);
-        }
+            => this.converter.ConvertToDbValue("2023-06-21", DbDataTypeCategory.Date);
 
         [TestMethod]
         public void ConvertToDbValue_PerformanceTest()

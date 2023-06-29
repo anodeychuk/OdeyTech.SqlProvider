@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using OdeyTech.ProductivityKit;
 using OdeyTech.ProductivityKit.Extension;
 using OdeyTech.SqlProvider.Entity.Table.Column;
 using OdeyTech.SqlProvider.Enum;
@@ -38,10 +39,7 @@ namespace OdeyTech.SqlProvider.Entity.Table
         /// <exception cref="ArgumentException">Thrown when table name is null.</exception>
         public void SetName(string tableName, string tablePrefix = null)
         {
-            if (tableName.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException("The table name cannot be null");
-            }
+            ThrowHelper.ThrowIfNullOrEmpty(tableName, nameof(tableName), "The table name cannot be null");
 
             this.tableName = tableName;
             this.tablePrefix = tablePrefix;
@@ -155,10 +153,11 @@ namespace OdeyTech.SqlProvider.Entity.Table
         /// <exception cref="ArgumentException">Thrown when table_name is null or columns is null or number of columns is 0.</exception>
         public void Validate(SqlQueryType sqlType)
         {
-            Check(() => this.tableName.IsNullOrEmpty(), nameof(this.tableName));
-            if (sqlType is SqlQueryType.Insert or SqlQueryType.Update)
+            ThrowHelper.ThrowIfNullOrEmpty(this.tableName, nameof(this.tableName));
+
+            if (sqlType is SqlQueryType.Insert or SqlQueryType.Update && (Columns == null || Columns.Count == 0))
             {
-                Check(() => Columns == null || Columns.Count == 0, nameof(Columns));
+                throw new ArgumentException(nameof(Columns));
             }
         }
 
@@ -167,8 +166,7 @@ namespace OdeyTech.SqlProvider.Entity.Table
         /// </summary>
         /// <returns>A copy of the SQL table.</returns>
         public object Clone()
-        {
-            var query = new SqlTable
+            => new SqlTable
             {
                 tableName = this.tableName,
                 tablePrefix = this.tablePrefix,
@@ -177,21 +175,6 @@ namespace OdeyTech.SqlProvider.Entity.Table
                 conditions = this.conditions,
                 orderBy = this.orderBy
             };
-            return query;
-        }
-
-        /// <summary>
-        /// Checks a condition and throws an exception if it is true.
-        /// </summary>
-        /// <param name="condition">The condition to check.</param>
-        /// <param name="paramName">The name of the parameter.</param>
-        private void Check(Func<bool> action, string paramName)
-        {
-            if (action())
-            {
-                throw new ArgumentNullException(paramName);
-            }
-        }
 
         /// <summary>
         /// Determines whether the specified object is equal to the current object based on the hash code.

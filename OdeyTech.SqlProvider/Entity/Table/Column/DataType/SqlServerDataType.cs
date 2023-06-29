@@ -58,17 +58,9 @@ namespace OdeyTech.SqlProvider.Entity.Table.Column.DataType
         /// </summary>
         /// <param name="type">The SQL Server data type.</param>
         /// <param name="size">The size of the SQL Server data type.</param>
-        public SqlServerDataType(SqlServerDataType.DataType type, string size) : this(type)
+        public SqlServerDataType(SqlServerDataType.DataType type, string size = null)
         {
             Size = size;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SqlServerDataType"/> class with the specified type.
-        /// </summary>
-        /// <param name="type">The SQL Server data type.</param>
-        public SqlServerDataType(SqlServerDataType.DataType type)
-        {
             TypeName = type.ToString();
             Category = GetTypeCategory(type);
         }

@@ -54,7 +54,7 @@ namespace OdeyTech.SqlProvider.Test.Entity.Table
         public void Validate_ThrowsException_WhenTableNameIsNull()
         {
             var table = new SqlTable();
-            Assert.ThrowsException<ArgumentNullException>(() => table.Validate(SqlQueryType.Create));
+            Assert.ThrowsException<ArgumentException>(() => table.Validate(SqlQueryType.Create));
         }
 
         [TestMethod]
